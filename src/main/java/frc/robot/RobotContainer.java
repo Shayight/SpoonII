@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -20,9 +21,10 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final DrivetrainSubsystem m_driveSubsystem = new DrivetrainSubsystem();
-  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  public static ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  public static DrivetrainSubsystem m_driveSubsystem = new DrivetrainSubsystem();
+  public static ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  public static ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
   //Input
   PS4Controller driver = new PS4Controller(0);
@@ -47,7 +49,7 @@ public class RobotContainer {
     double driveLS = driver.getLeftY();
     double driveRS = driver.getRightY();
 
-    m_driveSubsystem.tankDrive(driveLS, driveRS, 1);  
+    m_driveSubsystem.tankDrive(0, 0, 1);  
   }
 
   /**

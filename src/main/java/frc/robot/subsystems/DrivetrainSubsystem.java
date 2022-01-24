@@ -17,13 +17,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public DifferentialDrive m_drive;
   /** Creates a new ExampleSubsystem. */
   public DrivetrainSubsystem() {
-    m_FL = new WPI_TalonFX(0);
-    m_RL = new WPI_TalonFX(1);
+    m_FL = new WPI_TalonFX(1);
+    m_RL = new WPI_TalonFX(2);
 
     m_leftSide = new MotorControllerGroup(m_FL, m_RL);
 
-    m_FR = new WPI_TalonFX(2);
-    m_RR = new WPI_TalonFX(3);
+    m_FR = new WPI_TalonFX(3);
+    m_RR = new WPI_TalonFX(4);
 
     m_rightSide = new MotorControllerGroup(m_FR, m_RR);
 
