@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_robotContainer.m_shooterSubsystem.setShooterSpeed(1, 0.75);
+    m_robotContainer.shooter();
     m_robotContainer.driveRobot();
   }
 

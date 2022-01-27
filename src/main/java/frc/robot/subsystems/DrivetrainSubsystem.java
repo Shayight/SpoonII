@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -28,17 +29,40 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_rightSide = new MotorControllerGroup(m_FR, m_RR);
 
     m_drive = new DifferentialDrive(m_leftSide,m_rightSide);
-
   }
   
   public void tankDrive(double speedLeft, double speedRight, double mod){
       m_drive.tankDrive(speedLeft*mod, speedRight*mod);
   }
 
+  public double getEncoderDistance(int motor) {
+    switch(motor)
+    {
+      case 1:
+      //get FL motor encoder rotation
+      return m_FL.getSelectedSensorPosition();
+
+      case 2:
+      //get RL motor encoder rotation
+      return m_RL.getSelectedSensorPosition();
+
+      case 3:
+      //get FR motor encoder rotation
+      return m_FR.getSelectedSensorPosition();
+
+      case 4:
+      //get RR motor encoder rotation
+      return m_RR.getSelectedSensorPosition();
+
+    }
+    return 0;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
 
   @Override
   public void simulationPeriodic() {

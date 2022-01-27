@@ -48,8 +48,18 @@ public class RobotContainer {
   public void driveRobot(){
     double driveLS = driver.getLeftY();
     double driveRS = driver.getRightY();
+    m_driveSubsystem.tankDrive(driveLS, driveRS, 1);  
+  }
 
-    m_driveSubsystem.tankDrive(0, 0, 1);  
+  public void shooter() {
+    boolean shooterButton = operator.getCrossButton();
+    double modifier = (1 - operator.getL2Axis())/2;
+    System.out.println(modifier);
+
+    if(shooterButton)
+      m_shooterSubsystem.setShooterSpeed(1, modifier);
+    else
+      m_shooterSubsystem.setShooterSpeed(0, 0);
   }
 
   /**
