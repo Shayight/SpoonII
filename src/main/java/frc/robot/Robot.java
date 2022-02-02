@@ -82,8 +82,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_robotContainer.shooter();
-    m_robotContainer.driveRobot();
+    m_robotContainer.shooter(); //activates shooter
+    m_robotContainer.driveRobot(); //drives robot
   }
 
   @Override

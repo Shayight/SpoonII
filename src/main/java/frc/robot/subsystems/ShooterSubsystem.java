@@ -15,7 +15,7 @@ public class ShooterSubsystem extends SubsystemBase {
         m_rightShooter = new WPI_TalonFX(6);
 
         m_leftShooter.setNeutralMode(NeutralMode.Brake);
-        m_rightShooter.setNeutralMode(NeutralMode.Brake);
+        m_rightShooter.setNeutralMode(NeutralMode.Brake); //shooter should not be moving by default.
     }
 
     @Override
@@ -30,12 +30,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void setShooterSpeed(double speed,double modifier) {
         if (speed == 0.0){
-            m_leftShooter.set(TalonFXControlMode.PercentOutput,0.0*modifier);
-            m_rightShooter.set(TalonFXControlMode.PercentOutput,0.0*modifier);
+            m_leftShooter.set(TalonFXControlMode.PercentOutput,0.0*modifier); //no shooter speed, shooter disabled.
+            m_rightShooter.set(TalonFXControlMode.PercentOutput,0.0*modifier); 
           }
           else{
             m_leftShooter.set(TalonFXControlMode.PercentOutput, -speed*modifier);
-            m_rightShooter.set(TalonFXControlMode.PercentOutput, speed*modifier);
+            m_rightShooter.set(TalonFXControlMode.PercentOutput, speed*modifier); //sets shooter speed 
           }
     }
 

@@ -4,19 +4,17 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     public WPI_TalonFX m_FL,m_FR,m_RL,m_RR;
     public MotorControllerGroup m_leftSide, m_rightSide;
     public DifferentialDrive m_drive;
-  /** Creates a new ExampleSubsystem. */
+  /** Creates a new Drivetrain subsystem and assigns sides. */
   public DrivetrainSubsystem() {
     m_FL = new WPI_TalonFX(1);
     m_RL = new WPI_TalonFX(2);
@@ -40,7 +38,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     {
       case 1:
       //get FL motor encoder rotation
-      return m_FL.getSelectedSensorPosition();
+      return m_FL.getSelectedSensorPosition(); //in theory this should work (per 4096 sensor units, do math to figure out the accurate distance in inches)
 
       case 2:
       //get RL motor encoder rotation

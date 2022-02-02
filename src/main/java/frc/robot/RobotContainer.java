@@ -46,20 +46,20 @@ public class RobotContainer {
   }
 
   public void driveRobot(){
-    double driveLS = driver.getLeftY();
-    double driveRS = driver.getRightY();
-    m_driveSubsystem.tankDrive(driveLS, driveRS, 1);  
+    double driveLS = driver.getLeftY(); //gets left Y axis
+    double driveRS = driver.getRightY(); //gets right Y axis
+    m_driveSubsystem.tankDrive(driveLS, driveRS, 1);  //driver control
   }
 
   public void shooter() {
-    boolean shooterButton = operator.getCrossButton();
-    double modifier = (1 - operator.getL2Axis())/2;
+    boolean shooterButton = operator.getCrossButton(); //binds the shooter to the crosshair button.
+    double modifier = (1 - operator.getL2Axis())/2; //gets a value between 0 and 1 via the trigger. 1 is released, 0 is pressed down.
     System.out.println(modifier);
 
     if(shooterButton)
-      m_shooterSubsystem.setShooterSpeed(1, modifier);
+      m_shooterSubsystem.setShooterSpeed(1, modifier); //shoots ball
     else
-      m_shooterSubsystem.setShooterSpeed(0, 0);
+      m_shooterSubsystem.setShooterSpeed(0, 0); //turns shooters off.
   }
 
   /**
