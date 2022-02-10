@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     public WPI_TalonFX m_FL,m_FR,m_RL,m_RR;
@@ -16,13 +17,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public DifferentialDrive m_drive;
   /** Creates a new Drivetrain subsystem and assigns sides. */
   public DrivetrainSubsystem() {
-    m_FL = new WPI_TalonFX(1);
-    m_RL = new WPI_TalonFX(2);
+    m_FL = new WPI_TalonFX(Constants.DRIVETRAIN_FRONT_LEFT_TALON);
+    m_RL = new WPI_TalonFX(Constants.DRIVETRAIN_REAR_LEFT_TALON);
 
     m_leftSide = new MotorControllerGroup(m_FL, m_RL);
 
-    m_FR = new WPI_TalonFX(3);
-    m_RR = new WPI_TalonFX(4);
+    m_FR = new WPI_TalonFX(Constants.DRIVETRAIN_FRONT_RIGHT_TALON);
+    m_RR = new WPI_TalonFX(Constants.DRIVETRAIN_REAR_RIGHT_TALON);
 
     m_rightSide = new MotorControllerGroup(m_FR, m_RR);
 
@@ -34,26 +35,42 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getEncoderDistance(int motor) {
+    Double distanceTotal =0.0; 
     switch(motor)
     {
       case 1:
       //get FL motor encoder rotation
-      return m_FL.getSelectedSensorPosition(); //in theory this should work (per 4096 sensor units, do math to figure out the accurate distance in inches)
+       Double m_flSensorPos =  m_FL.getSelectedSensorPosition(); //in theory this should work (per 4096 sensor units, do math to figure out the accurate distance in inches)
+       Double distance_M_FL = m_flSensorPos * (Constants.DISTANCE_INCHES_ONE_UNIT); 
+       distanceTotal += distance_M_FL;
 
-      case 2:
+       return distanceTotal; 
+      
+       case 2:
       //get RL motor encoder rotation
-      return m_RL.getSelectedSensorPosition();
+      Double m_rlSensorPos = m_RL.getSelectedSensorPosition();
+      Double distance_M_RL = m_rlSensorPos * (Constants.DISTANCE_INCHES_ONE_UNIT); 
+      distanceTotal += distance_M_RL; 
 
+      return distanceTotal; 
+      
       case 3:
       //get FR motor encoder rotation
-      return m_FR.getSelectedSensorPosition();
+      Double m_frSensorPos = m_FR.getSelectedSensorPosition();
+      Double distance_M_FR = m_frSensorPos * (Constants.DISTANCE_INCHES_ONE_UNIT); 
+      distanceTotal += distance_M_FR; 
+
+      return distanceTotal; 
 
       case 4:
       //get RR motor encoder rotation
-      return m_RR.getSelectedSensorPosition();
+      Double m_rrSensorPos = m_RR.getSelectedSensorPosition();
+      Double distance_M_RR = m_rrSensorPos * (Constants.DISTANCE_INCHES_ONE_UNIT); 
+      distanceTotal += distance_M_RR; 
 
+      return distanceTotal; 
     }
-    return 0;
+    return distanceTotal;
   }
 
   @Override

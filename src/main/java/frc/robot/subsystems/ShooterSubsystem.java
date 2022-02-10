@@ -3,16 +3,25 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
     
     WPI_TalonFX m_leftShooter, m_rightShooter;
+    CANSparkMax m_turret;
+    RelativeEncoder m_turretEncoder;
+    
 
     public ShooterSubsystem() {
         m_leftShooter = new WPI_TalonFX(5);
         m_rightShooter = new WPI_TalonFX(6);
+        m_turret = new CANSparkMax(8, MotorType.kBrushless);
+        m_turretEncoder = m_turret.getEncoder();
 
         m_leftShooter.setNeutralMode(NeutralMode.Brake);
         m_rightShooter.setNeutralMode(NeutralMode.Brake); //shooter should not be moving by default.
@@ -39,8 +48,18 @@ public class ShooterSubsystem extends SubsystemBase {
           }
     }
 
+    public void setTurretSpeed(double speed, double modifier) {
+      //rotates turret
+      m_turret.set(speed*modifier);
+    }
+
     public double shooterEncoder(){
-        // System.out.println("shooter encoder"+  m_shooterRight.getSelectedSensorVelocity());
-        return m_rightShooter.getSelectedSensorVelocity();
-      }
+      // System.out.println("shooter encoder"+  m_shooterRight.getSelectedSensorVelocity());
+      return m_rightShooter.getSelectedSensorVelocity();
+    }
+    
+    public double turretEncoder(){
+      return m_turretEncoder.getPosition(); 
+      //TODO: need to test for how many steps are in one full revolution, and convert the steps to degrees.
+    }
 }

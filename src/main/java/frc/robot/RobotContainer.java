@@ -27,8 +27,8 @@ public class RobotContainer {
   public static ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
   //Input
-  PS4Controller driver = new PS4Controller(0);
-  PS4Controller operator = new PS4Controller(1);
+  public static PS4Controller m_driver = new PS4Controller(0);
+  public static PS4Controller m_operator = new PS4Controller(1);
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -46,14 +46,14 @@ public class RobotContainer {
   }
 
   public void driveRobot(){
-    double driveLS = driver.getLeftY(); //gets left Y axis
-    double driveRS = driver.getRightY(); //gets right Y axis
+    double driveLS = m_driver.getLeftY(); //gets left Y axis
+    double driveRS = m_driver.getRightY(); //gets right Y axis
     m_driveSubsystem.tankDrive(driveLS, driveRS, 1);  //driver control
   }
 
   public void shooter() {
-    boolean shooterButton = operator.getCrossButton(); //binds the shooter to the crosshair button.
-    double modifier = (1 - operator.getL2Axis())/2; //gets a value between 0 and 1 via the trigger. 1 is released, 0 is pressed down.
+    boolean shooterButton = m_operator.getCrossButton(); //binds the shooter to the crosshair button.
+    double modifier = (1 - m_operator.getL2Axis())/2; //gets a value between 0 and 1 via the trigger. 1 is released, 0 is pressed down.
     System.out.println(modifier);
 
     if(shooterButton)
