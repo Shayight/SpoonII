@@ -4,9 +4,8 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -23,52 +22,41 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   public static DrivetrainSubsystem m_driveSubsystem = new DrivetrainSubsystem();
-  public static ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   public static ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
 
-  //Input
+  //Input from the PS4 Controllers. When calling these, we must define what port the controllers are plugged into (set by the DRIVER STATION).
   public static PS4Controller m_driver = new PS4Controller(0);
   public static PS4Controller m_operator = new PS4Controller(1);
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
-  }
-
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {
-
+    //executes the SmartDashboard commands.
+    SetupDashboard();
   }
 
   public void driveRobot(){
-    double driveLS = m_driver.getLeftY(); //gets left Y axis
-    double driveRS = m_driver.getRightY(); //gets right Y axis
-    m_driveSubsystem.tankDrive(driveLS, driveRS, 1);  //driver control
+    double driveLS = m_driver.getLeftY(); //gets Y axis (the up and down) of the left stick for the driver's controller (port 0).
+    double driveRS = m_driver.getRightY(); //gets Y axis of the right stick for the driver's controller (port 0).
+    m_driveSubsystem.tankDrive(driveLS, driveRS, 1);  //The driver is able to control the robot using tank drive.
   }
 
   public void shooter() {
     boolean shooterButton = m_operator.getCrossButton(); //binds the shooter to the crosshair button.
-    double modifier = (1 - m_operator.getL2Axis())/2; //gets a value between 0 and 1 via the trigger. 1 is released, 0 is pressed down.
-    System.out.println(modifier);
+    double modifier = (1 - m_operator.getL2Axis())/2; //gets a value between 0 and 1 via the trigger. 1 is released, 0 is pressed down. (converted from -1 and 1)
+    SmartDashboard.putNumber("Turret Modifier", modifier);
 
     if(shooterButton)
-      m_shooterSubsystem.setShooterSpeed(1, modifier); //shoots ball
+      m_shooterSubsystem.setShooterSpeed(1, modifier); //Enables shooting the balls out, which the force can be adjusted using the modifier.
     else
       m_shooterSubsystem.setShooterSpeed(0, 0); //turns shooters off.
   }
 
+
   /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
+   * The intention of this method is to setup the Smart Dashboard to display global output values, such as distance, rotation, etc.
    */
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+  public void SetupDashboard(){
+    SmartDashboard.putNumber("Turret Encoder Rotation", m_shooterSubsystem.getTurretRotation());
+    SmartDashboard.putNumber("Distance travelled (in inches)",m_driveSubsystem.getLinearDistanceEncoder());
   }
 }

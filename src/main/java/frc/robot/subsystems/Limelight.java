@@ -11,6 +11,8 @@ public class Limelight extends SubsystemBase {
     private HttpCamera LLFeed;
     private String LLName;
 
+    //THIS ENTIRE CLASS NEEDS ORGANIZING
+
     public Limelight(String limelightName) {
         table = NetworkTableInstance.getDefault().getTable(limelightName);
         LLName = limelightName;
@@ -81,9 +83,9 @@ public class Limelight extends SubsystemBase {
     //   }
 
     public double steeringAdjust() {
-        float kp = -.22f;//Adjusts the value returned from Limelight
-        float minCommand = .01f;//Minimum value a value can have
-        float steeringAdjust = 0.07f;//Default value of adjust
+        float kp = -.22f; //Adjusts the value returned from Limelight
+        float minCommand = .01f; //Minimum value a value can have
+        float steeringAdjust = 0.07f; //Default value of adjust
         float tx = (float)offsetX();
         //SmartDashboard.setDefaultNumber("TX", tx);
         float headingError = -tx;
