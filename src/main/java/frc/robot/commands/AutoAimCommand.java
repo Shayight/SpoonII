@@ -7,9 +7,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.*;
 import frc.robot.RobotContainer;
 
@@ -28,7 +26,7 @@ public class AutoAimCommand extends CommandBase {
     // addRequirements(subsystem2);
     // limelight_subsystem = subsystem;
     // turret_subsystem = subsystem2;
-    turret_Limelight = new Limelight("limelight-turret");
+    turret_Limelight = new Limelight("limelight");
     shooterSubsystem = RobotContainer.m_shooterSubsystem;
 
     mfd = modifier;

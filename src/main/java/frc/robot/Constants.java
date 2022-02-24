@@ -13,12 +13,5 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    //Assigns drivetrain motors, this is kinda extra cause we don't really need it.
-    public static final int DRIVETRAIN_FRONT_LEFT_TALON = 0;
-    public static final int DRIVETRAIN_REAR_LEFT_TALON = 2;
-    public static final int DRIVETRAIN_FRONT_RIGHT_TALON = 3;
-    public static final int DRIVETRAIN_REAR_RIGHT_TALON = 4; 
-
-    //Distance conversion for the Encoder from angular units (4096) to linear inches.
-    public static final double DISTANCE_INCHES_ONE_UNIT = ((18.84955592/360)/0.09);  
+ 
 }

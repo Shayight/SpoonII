@@ -118,11 +118,8 @@ public class Limelight extends SubsystemBase {
 
       public void Vision() {
         ShuffleboardTab mainTab = Shuffleboard.getTab("SmartDashboard");
-        if(LLName==("limelight-turret")){
+        if(LLName==("limelight")){
             LLFeed = new HttpCamera("limelight", "http://10.3.69.44:5800/stream.mjpeg");
-        }
-        if(LLName==("limelight-intake")){
-            LLFeed = new HttpCamera("limelight", "http://10.3.69.12:5800/stream.mjpeg");
         }
         mainTab.add("LimeLight", LLFeed).withPosition(0, 0).withSize(15, 8);
 
