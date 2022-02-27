@@ -23,4 +23,12 @@ public final class Constants {
     // distance from the target to the floor
     public static double goalHeightInches = 104.0;
 
+    /**
+     * 0 = left
+     * 1 = center
+     * 2 = right
+     */
+    //Set this before the game, this will control the autonomous starting mode.
+    public static int autoMode = 0;
+
 }

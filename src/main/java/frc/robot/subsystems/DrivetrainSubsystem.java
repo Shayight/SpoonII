@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -19,6 +20,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public WPI_TalonFX m_FL,m_FR,m_RL,m_RR;
     public MotorControllerGroup m_leftSide, m_rightSide;
     public DifferentialDrive m_drive;
+    public WPI_PigeonIMU pigeon;
 
   /** Creates a new Drivetrain subsystem and assigns sides. */
   public DrivetrainSubsystem() {
@@ -51,6 +53,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     //Finally, we need to combine the two sides into one drive that can be controlled autonomously or by an operator.
     m_drive = new DifferentialDrive(m_leftSide,m_rightSide);
+
+    //Because the Pigeon IMU is connected over a CAN bus rather than to a TalonSRX, we can use a CAN ID for it.
+    pigeon = new WPI_PigeonIMU(5);
+    //We need to reset it so all the values are at 0,0,0 upon starting the robot.
+    pigeon.reset();
   }
   
   /**
@@ -61,6 +68,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void tankDrive(double speedLeft, double speedRight, double mod){
       m_drive.tankDrive(speedLeft*mod, speedRight*mod);
+  }
+
+  //This gets the current angle of the Pigeon IMU, or rather the direction of the robot.
+  public double getRotation() {
+    /**
+     * Something to note about the Pigeon: The getAngle() function is continuous.
+     * Meaning that after 360 degrees, the pigeon will not start over from 0, it will
+     * continue adding up (361, 362, etc.)
+     */
+    return pigeon.getAngle();
   }
 
   public double getLinearDistanceEncoder() {
