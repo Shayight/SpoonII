@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.ShooterSubsystem;
 
 /**
@@ -21,7 +22,8 @@ public class RobotContainer {
   public static ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   public static DrivetrainSubsystem m_driveSubsystem = new DrivetrainSubsystem();
   public static ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
-
+  public static Limelight m_limelight = new Limelight("limelight");
+ 
   //Input from the PS4 Controllers. When calling these, we must define what port the controllers are plugged into (set by the DRIVER STATION).
   public static PS4Controller m_driver = new PS4Controller(0);
   public static PS4Controller m_operator = new PS4Controller(1);
@@ -56,5 +58,7 @@ public class RobotContainer {
   public void SetupDashboard(){
     SmartDashboard.putNumber("Turret Encoder Rotation", m_shooterSubsystem.getTurretRotation());
     SmartDashboard.putNumber("Distance travelled (in inches)",m_driveSubsystem.getLinearDistanceEncoder());
+    SmartDashboard.putNumber("Current Angle of Robot",m_driveSubsystem.getRotation());
+    SmartDashboard.putNumber("Distance from Objective", m_limelight.getDistance());
   }
 }
