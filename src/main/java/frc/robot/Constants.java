@@ -13,5 +13,14 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-//test
+
+    //LIMELIGHT DISTANCE SETTINGS       
+     
+    // how many degrees back is your limelight rotated from perfectly vertical?
+    public static double limelightMountAngleDegrees = 25.0;
+    // distance from the center of the Limelight lens to the floor
+    public static double limelightHeight = 20.0;
+    // distance from the target to the floor
+    public static double goalHeightInches = 104.0;
+
 }

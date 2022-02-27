@@ -71,6 +71,7 @@ public class ShooterSubsystem extends SubsystemBase {
       //This gets the speed of the shooter, recorded in raw sensor units for every 100ms.
       return m_rightShooter.getSelectedSensorVelocity();
     }
+
     
     public double getTurretRotation(){
       /** 

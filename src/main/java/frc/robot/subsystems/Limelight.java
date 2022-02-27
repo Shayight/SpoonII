@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.shuffleboard.*;
@@ -19,12 +20,13 @@ public class Limelight extends SubsystemBase {
         //System.out.println(NetworkTableInstance.getDefault().getTable("CameraPublisher").getEntry(limelightName).getString("source"));
     }
 
+    //Checks if the Limelight can see a target. Returns true if it can, returns false if it can't.
     public boolean canSeeTarget() {
         return table.getEntry("tv").getDouble(0) == 1;
     }
 
+    //Gets the X (horizontal) axis of the target relative to the center of the camera.
     public double offsetX() {
-        //System.out.println(table.getEntry("tx").getDouble(0));
         return table.getEntry("tx").getDouble(0.00);
         
     }
@@ -32,25 +34,38 @@ public class Limelight extends SubsystemBase {
     public double rotationY() {
         return table.getEntry("ts").getDouble(0.00);
     }
+
+    //Gets the Y (vertical) axis of the target relative to the center of the camera.
     public double offsetY() {
         return table.getEntry("ty").getDouble(0.00);
     }
+
+    //Checks what percent of the camera lens the target is occupying.
     public double areaPercent() {
         return table.getEntry("ta").getDouble(0.00);
     }
+
     //a value determined on the number of pipelines we have (created within limelight-local:5801)
     public void setPipeline(int mode) {
+        /** 
+         * How this is set up in our Limelight:
+         * 0: Limelight vision mode
+         * 1: Driver Camera mode
+        */
+        
         table.getEntry("pipeline").setNumber(mode);
     }
-    //a value setting the led mode of the limelight
+    //a value setting the LED mode of the limelight.
     public void setLEDMode(int mode) {
-        table.getEntry("ledMode").setNumber(mode);
         /*
         0	use the LED Mode set in the current pipeline
         1	force off
         2	force blink
         3	force on
         */
+
+        table.getEntry("ledMode").setNumber(mode);
+
     }
     //a value between 0 and 1, 0 being on, 1 being off 
     public void setCamMode(int mode) {
@@ -126,12 +141,17 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getDistance() {
-        double h1 = 53.34; //in CM
-        double h2 = offsetY(); //position offset (on Y axis) of target
-        double a1 = 25; //Angle of Limelight mounted
-        double a2 = rotationY(); //rotation offset of target (on Y axis)
-        // System.out.println("Angle To Target: "+rotationY());
-        // System.out.println("Denom: "+Math.tan(a1+a2));
-        return  (h2-h1) / Math.tan(a1+a2);
+        double targetOffsetAngle_Vertical = offsetY();
+        // how many degrees back is your limelight rotated from perfectly vertical?
+        double limelightMountAngleDegrees = Constants.limelightMountAngleDegrees;
+        // distance from the center of the Limelight lens to the floor
+        double limelightHeight = Constants.limelightHeight;
+        // distance from the target to the floor
+        double goalHeightInches = Constants.goalHeightInches;
+        double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+        double angleToGoalRadians = angleToGoalDegrees * (Math.PI / 180.0);
+        //calculate distance
+        double distanceFromLimelightToGoalInches = (goalHeightInches - limelightHeight)/Math.tan(angleToGoalRadians);
+        return distanceFromLimelightToGoalInches;
     }
 }
