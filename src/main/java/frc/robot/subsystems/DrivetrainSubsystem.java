@@ -21,6 +21,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public MotorControllerGroup m_leftSide, m_rightSide;
     public DifferentialDrive m_drive;
     public WPI_PigeonIMU pigeon;
+    //For the distance encoder
+    Double distanceTotal = 0.0;
 
   /** Creates a new Drivetrain subsystem and assigns sides. */
   public DrivetrainSubsystem() {
@@ -39,8 +41,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     /**
      * As of 2022, we MUST set one side to be inverted, 
-     * otherwise the robot would permanently be in a spinning state under operator control.
-     * If the operator were to push both sticks either up or down, the robot would spin since 
+     * otherwise the robot would permanently be in a spinning state under driver control.
+     * If the driver were to push both sticks either up or down, the robot would spin since 
      * the RIO assumes that the motors are all facing the same direction.
      */
     m_leftSide.setInverted(true);
@@ -51,13 +53,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     m_rightSide = new MotorControllerGroup(m_FR, m_RR);
 
-    //Finally, we need to combine the two sides into one drive that can be controlled autonomously or by an operator.
+    //Finally, we need to combine the two sides into one drive that can be controlled autonomously or by a driver.
     m_drive = new DifferentialDrive(m_leftSide,m_rightSide);
 
     //Because the Pigeon IMU is connected over a CAN bus rather than to a TalonSRX, we can use a CAN ID for it.
     pigeon = new WPI_PigeonIMU(5);
-    //We need to reset it so all the values are at 0,0,0 upon starting the robot.
+    //We need to reset it so all the values are at 0,0,0 upon starting the robot, and then follow up with a calibration test.
     pigeon.reset();
+    pigeon.calibrate();
   }
   
   /**
@@ -81,8 +84,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getLinearDistanceEncoder() {
-    //Resets the distanceTotal value with an initial value of 0.
-    Double distanceTotal = 0.0; 
+
     //get FL motor encoder rotation in a normalized (0-1) rotation, which helps us to determine rotation.
     Double m_flSensorPos =  m_FL.getSelectedSensorPosition() / 4096;
     /**
