@@ -17,7 +17,7 @@ public final class Constants {
     //LIMELIGHT DISTANCE SETTINGS       
      
     // how many degrees back is your limelight rotated from perfectly vertical?
-    public static double limelightMountAngleDegrees = 25.0;
+    public static double limelightMountAngleDegrees = 60.0;
     // distance from the center of the Limelight lens to the floor
     public static double limelightHeight = 20.0;
     // distance from the target to the floor

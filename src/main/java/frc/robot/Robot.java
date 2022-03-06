@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.AutoAimCommand;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
-
+  private JoystickButton operator_circleButton;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -26,7 +29,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+    m_robotContainer = new RobotContainer(); 
+    m_robotContainer.m_driveSubsystem.getRotation();
+    operator_circleButton = new JoystickButton(m_robotContainer.m_operator, PS4Controller.Button.kCircle.value);
+ 
   }
 
   /**
@@ -43,6 +49,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_robotContainer.SetupDashboard();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -57,12 +64,19 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
 
     // schedule the autonomous command (example)
-
+    
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {    
+    // System.out.println("auto periodic");
+    double leftAdjust = -1.0; 
+    double rightAdjust = -1.0; // default speed values for chase
+    double mindistance = 5;
+    leftAdjust -= m_robotContainer.m_limelight.steeringAdjust();//adjust each side according to tx
+    rightAdjust += m_robotContainer.m_limelight.steeringAdjust();
+    System.out.println(m_robotContainer.m_limelight.getDistance());}
 
   @Override
   public void teleopInit() {
@@ -71,6 +85,7 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
 
+    operator_circleButton.whenActive(new AutoAimCommand(0.6));
   }
 
   /** This function is called periodically during operator control. */
@@ -78,6 +93,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_robotContainer.shooter(); //activates shooter
     m_robotContainer.driveRobot(); //drives robot
+    m_robotContainer.watchIntakeControls();
   }
 
   @Override

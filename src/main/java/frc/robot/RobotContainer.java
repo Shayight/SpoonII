@@ -6,8 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -21,17 +23,23 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   public static DrivetrainSubsystem m_driveSubsystem = new DrivetrainSubsystem();
+  public static IntakeSubsystem m_intakeSystem = new IntakeSubsystem();
   public static ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   public static Limelight m_limelight = new Limelight("limelight");
  
+
+
+
   //Input from the PS4 Controllers. When calling these, we must define what port the controllers are plugged into (set by the DRIVER STATION).
   public static PS4Controller m_driver = new PS4Controller(0);
   public static PS4Controller m_operator = new PS4Controller(1);
 
+  //Buttons for commands from the controllers.
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     //executes the SmartDashboard commands.
-    SetupDashboard();
+    // SetupDashboard();
   }
 
   public void driveRobot(){
@@ -40,15 +48,33 @@ public class RobotContainer {
     m_driveSubsystem.tankDrive(driveLS, driveRS, 1);  //The driver is able to control the robot using tank drive.
   }
 
+  public void watchIntakeControls() {
+    double leftStickY = m_operator.getLeftY();
+    double intakePower = leftStickY;
+    m_intakeSystem.intakeSystem(intakePower, 1);
+  }
+
+
+
   public void shooter() {
     boolean shooterButton = m_operator.getCrossButton(); //binds the shooter to the crosshair button.
-    double modifier = (1 - m_operator.getL2Axis())/2; //gets a value between 0 and 1 via the trigger. 1 is released, 0 is pressed down. (converted from -1 and 1)
+    boolean reverseButton = m_operator.getSquareButton();
+
+    double maxDistance = 80;
+    double modifier =1;
+      modifier = m_limelight.getDistance()/maxDistance;
+
+    double turretInput = m_operator.getRightX();
     SmartDashboard.putNumber("Turret Modifier", modifier);
+    m_shooterSubsystem.setTurretSpeed(-turretInput, .6);
 
     if(shooterButton)
-      m_shooterSubsystem.setShooterSpeed(1, modifier); //Enables shooting the balls out, which the force can be adjusted using the modifier.
+      m_shooterSubsystem.setShooterSpeed(1,   modifier); //Enables shooting the balls out, which the force can be adjusted using the modifier.
+    else if(reverseButton)
+    m_shooterSubsystem.setShooterSpeed(-1, 0.7); //Enables shooting the balls out, which the force can be adjusted using the modifier.
     else
       m_shooterSubsystem.setShooterSpeed(0, 0); //turns shooters off.
+    
   }
 
 
@@ -58,7 +84,6 @@ public class RobotContainer {
   public void SetupDashboard(){
     SmartDashboard.putNumber("Turret Encoder Rotation", m_shooterSubsystem.getTurretRotation());
     SmartDashboard.putNumber("Distance travelled (in inches)",m_driveSubsystem.getLinearDistanceEncoder());
-    SmartDashboard.putNumber("Current Angle of Robot",m_driveSubsystem.getRotation());
     SmartDashboard.putNumber("Distance from Objective", m_limelight.getDistance());
   }
 }

@@ -4,11 +4,13 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -23,6 +25,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public WPI_PigeonIMU pigeon;
     //For the distance encoder
     Double distanceTotal = 0.0;
+    Double speedLimit = 0.8;
 
   /** Creates a new Drivetrain subsystem and assigns sides. */
   public DrivetrainSubsystem() {
@@ -31,7 +34,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * Then, we need to assign the left two motors to FL and RL, which stand for Front Left and Rear Left.
      */
     m_FL = new WPI_TalonFX(1);
+    m_FL.setNeutralMode(NeutralMode.Brake);
     m_RL = new WPI_TalonFX(2);
+    m_RL.setNeutralMode(NeutralMode.Brake);
     /**
      * After doing so, we need to group these motor controllers 
      * together into one side for the drivetrain which is where MotorControllerGroup comes in handy.
@@ -45,19 +50,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * If the driver were to push both sticks either up or down, the robot would spin since 
      * the RIO assumes that the motors are all facing the same direction.
      */
-    m_leftSide.setInverted(true);
 
     //Repeat the same process from the left side to the right side. FR = Front Right, RR = Rear Right.
     m_FR = new WPI_TalonFX(3);
+    m_FR.setNeutralMode(NeutralMode.Brake);
     m_RR = new WPI_TalonFX(4);
+    m_RR.setNeutralMode(NeutralMode.Brake);
 
     m_rightSide = new MotorControllerGroup(m_FR, m_RR);
+    m_rightSide.setInverted(true);
+    
 
     //Finally, we need to combine the two sides into one drive that can be controlled autonomously or by a driver.
     m_drive = new DifferentialDrive(m_leftSide,m_rightSide);
 
     //Because the Pigeon IMU is connected over a CAN bus rather than to a TalonSRX, we can use a CAN ID for it.
-    pigeon = new WPI_PigeonIMU(5);
+    pigeon = new WPI_PigeonIMU(0);
     //We need to reset it so all the values are at 0,0,0 upon starting the robot, and then follow up with a calibration test.
     pigeon.reset();
     pigeon.calibrate();
@@ -70,7 +78,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param mod The modifier value for the drivetrain that limits the speed of the robot (between 0 and 1, can be a decimal value).
    */
   public void tankDrive(double speedLeft, double speedRight, double mod){
-      m_drive.tankDrive(speedLeft*mod, speedRight*mod);
+      m_drive.tankDrive(speedLeft*mod*speedLimit, speedRight*mod*speedLimit);
+      SmartDashboard.putNumber("Current Angle of Robot",getRotation());
   }
 
   //This gets the current angle of the Pigeon IMU, or rather the direction of the robot.
@@ -84,9 +93,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getLinearDistanceEncoder() {
-
     //get FL motor encoder rotation in a normalized (0-1) rotation, which helps us to determine rotation.
-    Double m_flSensorPos =  m_FL.getSelectedSensorPosition() / 4096;
+    Double m_flSensorPos =  m_FL.getSelectedSensorPosition();
     /**
      * This helps convert the unit rotation into something we can read in linear inches,
      * which can then be used to get the overall distance by adding this onto the next line. 
@@ -105,7 +113,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * This is the equivalent of writing
      * distanceTotal = distanceTotal + distance_M_FL;
      */
-    distanceTotal += distance_M_FL;
+    distanceTotal = distance_M_FL;
 
     return distanceTotal;
   }
