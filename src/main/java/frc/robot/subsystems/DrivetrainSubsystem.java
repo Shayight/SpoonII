@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     /**
@@ -65,7 +66,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_drive = new DifferentialDrive(m_leftSide,m_rightSide);
 
     //Because the Pigeon IMU is connected over a CAN bus rather than to a TalonSRX, we can use a CAN ID for it.
-    pigeon = new WPI_PigeonIMU(0);
+    pigeon = new WPI_PigeonIMU(5);
     //We need to reset it so all the values are at 0,0,0 upon starting the robot, and then follow up with a calibration test.
     pigeon.reset();
     pigeon.calibrate();
@@ -89,7 +90,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * Meaning that after 360 degrees, the pigeon will not start over from 0, it will
      * continue adding up (361, 362, etc.)
      */
-    return pigeon.getAngle();
+    return pigeon.getYaw();
   }
 
   public double getLinearDistanceEncoder() {
@@ -107,7 +108,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * (18.84 * 2) = 37.7" distance travelled assuming a ratio of 1:1. This may seem massive but this is entirely correct in theory.
      * ALSO IMPORTANT: If there is a gear ratio that is not 1:1, you MUST multiply that by the diameter of the wheel.
     */
-    Double distance_M_FL = m_flSensorPos * (6 * Math.PI); 
+    Double distance_M_FL = m_flSensorPos * (6 * Math.PI) * Constants.driveGearRatio; 
     /**
      * Because this value needs to keep adding onto itself, we need to use the += modifier
      * This is the equivalent of writing

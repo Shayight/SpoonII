@@ -23,6 +23,8 @@ public final class Constants {
     // distance from the target to the floor
     public static double goalHeightInches = 104.0;
 
+    public static double driveGearRatio = 8.92;
+
     /**
      * 0 = left
      * 1 = center

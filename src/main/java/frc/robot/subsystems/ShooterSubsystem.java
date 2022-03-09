@@ -16,13 +16,11 @@ public class ShooterSubsystem extends SubsystemBase {
     WPI_TalonFX m_rightShooter;
     CANSparkMax m_turret;
     RelativeEncoder m_turretEncoder;
-    VictorSPX m_conveyorBelt;
     
   //The intention of the Shooter Subsystem class is to initialize the shooter components, including the turret, shooter, and other devices.
     public ShooterSubsystem() {
         //This initializes the TalonFX on the CAN ID device 6, which is the right shooter.
         m_rightShooter = new WPI_TalonFX(6);
-        m_conveyorBelt = new VictorSPX(11);
         //This initializes the motor that's on the turret, which in this case is a NEO 550. You MUST designate this as a brushless motor,
         //as it could potentially damage the motor or motor controller if handled incorrectly.
         m_turret = new CANSparkMax(12, MotorType.kBrushless);
@@ -50,13 +48,11 @@ public class ShooterSubsystem extends SubsystemBase {
           //If there is no speed/direction input, then there is no reason to power the motor. PercentOutput refers to a value between -1 and 1,
           //where -1 represents -100% throttle, or reverse, 0 for 0% throttle, or not touched, or 1 for 100%, which represents full speed.
             m_rightShooter.set(TalonFXControlMode.PercentOutput,0.0); 
-            m_conveyorBelt.set(VictorSPXControlMode.PercentOutput,0.0);
           }
           else{
             //We flip the motors because on the physical shooter, we have the motors flipped, and in order to actually drive them in the same direction, we must flip it.
             //The modifier refers to how much the speed value should be scaled by. This can be a value between 0 and 1, any higher and the motor won't recognize it.
             m_rightShooter.set(TalonFXControlMode.PercentOutput, speed*modifier); //sets shooter speed 
-            m_conveyorBelt.set(VictorSPXControlMode.PercentOutput,-speed*modifier);
           }
     }
 

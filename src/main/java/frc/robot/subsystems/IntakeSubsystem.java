@@ -13,7 +13,7 @@ public class IntakeSubsystem extends SubsystemBase {
      * VictorSPX controllers connected to a VEX 775pro,
      * to control the intake, feeder, and conveyor.
      */
-    VictorSPX intakeMotor;
+    VictorSPX intakeMotor, feederMotor;
 
     public IntakeSubsystem() {
         /**
@@ -23,12 +23,15 @@ public class IntakeSubsystem extends SubsystemBase {
          * new methods.
          */
         intakeMotor = new VictorSPX(10);
+        feederMotor = new VictorSPX(11);
 
         /**
          * These motors should NOT be able to spin
          * when teleop or autonomous is not active.
          */
         intakeMotor.setNeutralMode(NeutralMode.Brake);
+        feederMotor.setNeutralMode(NeutralMode.Brake);
+        feederMotor.setInverted(true);
         // feederMotor.setNeutralMode(NeutralMode.Brake);
         // conveyorMotor.setNeutralMode(NeutralMode.Brake);
     }
@@ -39,8 +42,12 @@ public class IntakeSubsystem extends SubsystemBase {
      * and better cargo management.
      */
 
-    public void intakeSystem(double input, double mod){
+    public void setIntakeSystem(double input, double mod){
         intakeMotor.set(ControlMode.PercentOutput, input*mod);
+    }
+
+    public void setFeederSystem(double input, double mod){
+        feederMotor.set(ControlMode.PercentOutput, input*mod);
     }
 
 

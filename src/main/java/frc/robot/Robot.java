@@ -94,6 +94,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.shooter(); //activates shooter
     m_robotContainer.driveRobot(); //drives robot
     m_robotContainer.watchIntakeControls();
+    m_robotContainer.PnuematicControl();
   }
 
   @Override

@@ -5,12 +5,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.PnuematicSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 /**
@@ -26,6 +28,7 @@ public class RobotContainer {
   public static IntakeSubsystem m_intakeSystem = new IntakeSubsystem();
   public static ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   public static Limelight m_limelight = new Limelight("limelight");
+  public static PnuematicSubsystem m_pnuematicSubsystem = new PnuematicSubsystem();
  
 
 
@@ -51,7 +54,7 @@ public class RobotContainer {
   public void watchIntakeControls() {
     double leftStickY = m_operator.getLeftY();
     double intakePower = leftStickY;
-    m_intakeSystem.intakeSystem(intakePower, 1);
+    m_intakeSystem.setIntakeSystem(intakePower, 1);
   }
 
 
@@ -59,6 +62,7 @@ public class RobotContainer {
   public void shooter() {
     boolean shooterButton = m_operator.getCrossButton(); //binds the shooter to the crosshair button.
     boolean reverseButton = m_operator.getSquareButton();
+    boolean feederButton = m_operator.getL1Button();
 
     double maxDistance = 80;
     double modifier =1;
@@ -70,13 +74,28 @@ public class RobotContainer {
 
     if(shooterButton)
       m_shooterSubsystem.setShooterSpeed(1,   modifier); //Enables shooting the balls out, which the force can be adjusted using the modifier.
-    else if(reverseButton)
-    m_shooterSubsystem.setShooterSpeed(-1, 0.7); //Enables shooting the balls out, which the force can be adjusted using the modifier.
-    else
+    else if(reverseButton){
+      m_shooterSubsystem.setShooterSpeed(-1, 0.7); //Enables shooting the balls out, which the force can be adjusted using the modifier.
+      m_intakeSystem.setFeederSystem(-1, 0.7);  
+    }
+    else{
       m_shooterSubsystem.setShooterSpeed(0, 0); //turns shooters off.
+      m_intakeSystem.setFeederSystem(0, 0);  
+    }
+
+    if(feederButton)
+      m_intakeSystem.setFeederSystem(1, 0.6);
     
   }
 
+  public void PnuematicControl(){
+    boolean setIntakeFwd = m_operator.getTriangleButton();
+    boolean setIntakeRev = m_operator.getR1Button();
+    if(setIntakeFwd)
+      m_pnuematicSubsystem.setIntakeForward();
+    if(setIntakeRev)
+      m_pnuematicSubsystem.setIntakeReverse();
+  }
 
   /**
    * The intention of this method is to setup the Smart Dashboard to display global output values, such as distance, rotation, etc.
