@@ -52,7 +52,7 @@ public class ShootingCommand extends CommandBase {
   @Override
   public void initialize() {
     // System.out.println("init ");
-    RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0, mod);
+    RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0, 1);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -67,11 +67,11 @@ public class ShootingCommand extends CommandBase {
       RobotContainer.m_intakeSystem.setFeederSystem(1, 0.7);
       // System.out.println("Shooting "+timer.get());
     } else{
-      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,mod);//Charges falcon motors until they reach certain speed
+      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,1);//Charges falcon motors until they reach certain speed
       SmartDashboard.putNumber("Shooter Speed", RobotContainer.m_shooterSubsystem.shooterEncoder());
       timer.start();//Starts the timer
       }
-      buttonPressed = RobotContainer.m_operator.getL1Button();
+      buttonPressed = RobotContainer.m_operator.getCrossButton();
   }
 
 

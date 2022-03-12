@@ -4,21 +4,22 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class DriveForward extends CommandBase {
-    double initialPosition = 0;
-    double currentPosition = 0;
-    double distance = 0;
-    double mod = 0;
+    double initialPosition;
+    double currentPosition;
+    double distance;
+    double mod;
 
     //This command will drive the robot forward when called. Speed refers to the 
     public DriveForward(double speed, double distanceToTravel){
         distance = -distanceToTravel;
-        mod = speed;
+        mod = -speed;
+        RobotContainer.m_driveSubsystem.encoderReset();
     }
 
     @Override
     public void initialize() {
         //gets the initial position of the encoder, and starts driving the robot.
-        initialPosition = RobotContainer.m_driveSubsystem.getLinearDistanceEncoder();
+        initialPosition = 0;
         RobotContainer.m_driveSubsystem.tankDrive(1.0, 1.0, mod);
     }
 
@@ -39,7 +40,7 @@ public class DriveForward extends CommandBase {
     @Override
     public boolean isFinished() {
       //Check if the robot has reached the target distance, if it has, return true.
-      return ((currentPosition - initialPosition) <= distance);
+      return (currentPosition <= distance);
     }
 
     

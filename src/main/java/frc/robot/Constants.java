@@ -24,6 +24,8 @@ public final class Constants {
     public static double goalHeightInches = 104.0;
 
     public static double driveGearRatio = 8.92;
+    
+    public static double MetersPerPulse = (6 * Math.PI) / ((double) 2048 * driveGearRatio);
 
     /**
      * 0 = left
@@ -31,6 +33,6 @@ public final class Constants {
      * 2 = right
      */
     //Set this before the game, this will control the autonomous starting mode.
-    public static int autoMode = 0;
+    public static int autoMode = 2;
 
 }

@@ -7,7 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.AutoAimCommand;
+import frc.robot.commands.AutonomousCommand;
+import frc.robot.commands.ShootingCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -29,9 +33,12 @@ public class RobotContainer {
   public static ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   public static Limelight m_limelight = new Limelight("limelight");
   public static PnuematicSubsystem m_pnuematicSubsystem = new PnuematicSubsystem();
- 
 
+  public static AutonomousCommand m_autoCommand = new AutonomousCommand();
 
+  private JoystickButton operator_circleButton;
+  private JoystickButton operator_crossButton;
+  private double modifier = 0.6;
 
   //Input from the PS4 Controllers. When calling these, we must define what port the controllers are plugged into (set by the DRIVER STATION).
   public static PS4Controller m_driver = new PS4Controller(0);
@@ -57,24 +64,32 @@ public class RobotContainer {
     m_intakeSystem.setIntakeSystem(intakePower, 1);
   }
 
+  public void ShooterInit(){
+    operator_circleButton = new JoystickButton(m_operator, PS4Controller.Button.kCircle.value);
+    operator_crossButton = new JoystickButton(m_operator, PS4Controller.Button.kCross.value);
+
+    double maxDistance = 80;
+    modifier = m_limelight.getDistance()/maxDistance;
+
+    operator_circleButton.whenActive(new AutoAimCommand(0.6));
+    operator_crossButton.whenActive(new ShootingCommand(modifier, 15000));
+
+  }
 
 
   public void shooter() {
-    boolean shooterButton = m_operator.getCrossButton(); //binds the shooter to the crosshair button.
     boolean reverseButton = m_operator.getSquareButton();
+
+
+
     boolean feederButton = m_operator.getL1Button();
 
-    double maxDistance = 80;
-    double modifier =1;
-      modifier = m_limelight.getDistance()/maxDistance;
 
     double turretInput = m_operator.getRightX();
     SmartDashboard.putNumber("Turret Modifier", modifier);
     m_shooterSubsystem.setTurretSpeed(-turretInput, .6);
 
-    if(shooterButton)
-      m_shooterSubsystem.setShooterSpeed(1,   modifier); //Enables shooting the balls out, which the force can be adjusted using the modifier.
-    else if(reverseButton){
+    if(reverseButton){
       m_shooterSubsystem.setShooterSpeed(-1, 0.7); //Enables shooting the balls out, which the force can be adjusted using the modifier.
       m_intakeSystem.setFeederSystem(-1, 0.7);  
     }

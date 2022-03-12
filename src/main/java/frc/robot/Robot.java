@@ -10,6 +10,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoAimCommand;
+import frc.robot.commands.AutonomousCommand;
+import frc.robot.commands.DriveBackwards;
+import frc.robot.commands.DriveForward;
+import frc.robot.commands.ShootingCommand;
+import frc.robot.commands.TestCommand;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,7 +25,7 @@ import frc.robot.commands.AutoAimCommand;
 public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
-  private JoystickButton operator_circleButton;
+  private AutonomousCommand m_autoCommand;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -30,9 +35,9 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer(); 
+    m_robotContainer.m_driveSubsystem.getLinearDistanceEncoder();
     m_robotContainer.m_driveSubsystem.getRotation();
-    operator_circleButton = new JoystickButton(m_robotContainer.m_operator, PS4Controller.Button.kCircle.value);
- 
+    m_autoCommand = new AutonomousCommand();
   }
 
   /**
@@ -64,7 +69,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
 
     // schedule the autonomous command (example)
-    
+    new TestCommand().Autonomous3().schedule();
   }
 
   /** This function is called periodically during autonomous. */
@@ -84,8 +89,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-
-    operator_circleButton.whenActive(new AutoAimCommand(0.6));
+    m_robotContainer.ShooterInit();
   }
 
   /** This function is called periodically during operator control. */

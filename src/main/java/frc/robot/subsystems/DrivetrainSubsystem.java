@@ -8,11 +8,14 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.utils.MotorEncoder;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     /**
@@ -24,6 +27,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public MotorControllerGroup m_leftSide, m_rightSide;
     public DifferentialDrive m_drive;
     public WPI_PigeonIMU pigeon;
+    public MotorEncoder m_FLEncoder;
+    
     //For the distance encoder
     Double distanceTotal = 0.0;
     Double speedLimit = 0.8;
@@ -70,6 +75,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     //We need to reset it so all the values are at 0,0,0 upon starting the robot, and then follow up with a calibration test.
     pigeon.reset();
     pigeon.calibrate();
+
+    //Set the MotorEncoder value to the FL TalonFX.
+    m_FLEncoder = new MotorEncoder(m_FL, Constants.MetersPerPulse, false);
+    m_FLEncoder.resetEncoder();
   }
   
   /**
@@ -83,6 +92,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Current Angle of Robot",getRotation());
   }
 
+  public void arcadeDrive(double speed, double steering){
+    m_drive.arcadeDrive(speed*speedLimit, steering);
+  }
+
+  public void pigeonReset(){
+    pigeon.reset();
+  }
+
+  public void encoderReset(){
+    m_FLEncoder.resetEncoder();
+  }
+
   //This gets the current angle of the Pigeon IMU, or rather the direction of the robot.
   public double getRotation() {
     /**
@@ -94,27 +115,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public double getLinearDistanceEncoder() {
-    //get FL motor encoder rotation in a normalized (0-1) rotation, which helps us to determine rotation.
-    Double m_flSensorPos =  m_FL.getSelectedSensorPosition();
-    /**
-     * This helps convert the unit rotation into something we can read in linear inches,
-     * which can then be used to get the overall distance by adding this onto the next line. 
-     * In order to actually convert linear rotation to distances, first we need to get the diameter
-     * of the wheel, which in this case would be 6". For every 360 degrees travelled (or rather 4096 units),
-     * we need to convert this value to 6". In order to do this, we need to firstly multiply by Pi to get the circumference,
-     * and then multiply it by the amount of revolutions completed, which gives us the total distance completed.
-     * Example: 6" wheel, 2 rotations:
-     * (6 * pi) = 18.85" circumference
-     * (18.84 * 2) = 37.7" distance travelled assuming a ratio of 1:1. This may seem massive but this is entirely correct in theory.
-     * ALSO IMPORTANT: If there is a gear ratio that is not 1:1, you MUST multiply that by the diameter of the wheel.
-    */
-    Double distance_M_FL = m_flSensorPos * (6 * Math.PI) * Constants.driveGearRatio; 
-    /**
-     * Because this value needs to keep adding onto itself, we need to use the += modifier
-     * This is the equivalent of writing
-     * distanceTotal = distanceTotal + distance_M_FL;
-     */
-    distanceTotal = distance_M_FL;
+
+    distanceTotal = m_FLEncoder.getPositionMeters();
 
     return distanceTotal;
   }

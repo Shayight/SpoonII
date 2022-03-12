@@ -11,22 +11,23 @@ public class DriveBackwards extends CommandBase {
 
     //This command will drive the robot forward when called. Speed refers to the 
     public DriveBackwards(double speed, double distanceToTravel){
-        distance = -distanceToTravel;
-        mod = speed;
+        distance = distanceToTravel;
+        mod = -speed;
     }
 
     @Override
     public void initialize() {
         //gets the initial position of the encoder, and starts driving the robot.
+        RobotContainer.m_driveSubsystem.encoderReset();
         initialPosition = RobotContainer.m_driveSubsystem.getLinearDistanceEncoder();
-        RobotContainer.m_driveSubsystem.tankDrive(1.0, 1.0, mod);
+        RobotContainer.m_driveSubsystem.tankDrive(-1.0, -1.0, mod);
     }
 
     @Override
     public void execute() {
         //Measures the current position of the robot, and continues powering the drivetrain.
         currentPosition = RobotContainer.m_driveSubsystem.getLinearDistanceEncoder();
-        RobotContainer.m_driveSubsystem.tankDrive(1, 1, mod);
+        RobotContainer.m_driveSubsystem.tankDrive(-1, -1, mod);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class DriveBackwards extends CommandBase {
     @Override
     public boolean isFinished() {
       //Check if the robot has reached the target distance.
-      return ((currentPosition - initialPosition) <= distance);
+      return (currentPosition >= distance);
     }
 
     
