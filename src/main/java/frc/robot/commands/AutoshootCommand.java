@@ -55,7 +55,7 @@ public class AutoshootCommand extends CommandBase{
           //17300 for
           //System.out.println("Execute shooter stuff");
           RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0, mod);
-          RobotContainer.m_intakeSystem.setFeederSystem(1, 1);
+          RobotContainer.m_intakeSystem.setFeederSystem(-1, 1);
       }
         else{
           RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,mod);//Charges falcon motors until they reach certain speed

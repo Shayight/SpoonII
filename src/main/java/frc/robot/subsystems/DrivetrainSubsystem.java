@@ -73,8 +73,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     //Because the Pigeon IMU is connected over a CAN bus rather than to a TalonSRX, we can use a CAN ID for it.
     pigeon = new WPI_PigeonIMU(5);
     //We need to reset it so all the values are at 0,0,0 upon starting the robot, and then follow up with a calibration test.
-    pigeon.reset();
-    pigeon.calibrate();
+    pigeonReset();
 
     //Set the MotorEncoder value to the FL TalonFX.
     m_FLEncoder = new MotorEncoder(m_FL, Constants.MetersPerPulse, false);
@@ -111,7 +110,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * Meaning that after 360 degrees, the pigeon will not start over from 0, it will
      * continue adding up (361, 362, etc.)
      */
-    return pigeon.getYaw();
+    return pigeon.getAngle();
   }
 
   public double getLinearDistanceEncoder() {

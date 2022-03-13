@@ -30,7 +30,7 @@ public class IntakeCommand extends CommandBase {
    @Override
    public void execute() {
     RobotContainer.m_intakeSystem.setIntakeSystem(-1, mod);
-    RobotContainer.m_intakeSystem.setFeederSystem(0.3, mod);
+    RobotContainer.m_intakeSystem.setFeederSystem(1, mod);
     currentTime = timer.get();
    }
  

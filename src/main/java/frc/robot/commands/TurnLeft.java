@@ -16,10 +16,12 @@ public class TurnLeft extends CommandBase {
   double pigeonVal;
   double pigeonValnit;
   double mod = 0.5;
+  double startingAngle;
   double targetDegrees;
   double P=0.1, I=0, D =0;
   int integral, previous_error;
   double error,derivative,rcw,time, currTime;
+  double currentAngle;
   Timer timer;
 
   
@@ -29,6 +31,7 @@ public class TurnLeft extends CommandBase {
     this.targetDegrees = targetDegrees;
     this.time = time;
     timer = new Timer();
+    RobotContainer.m_driveSubsystem.pigeonReset();
     // drive_subsystem = subsystem;
     // addRequirements(drive_subsystem);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -45,20 +48,25 @@ public class TurnLeft extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    startingAngle = RobotContainer.m_driveSubsystem.getRotation();
     //get value from pigeon
     // pigeonValnit = RobotContainer.m_drive_subsystem.getYaw();
     // RobotContainer.m_drive_subsystem.tankDrive(1.0,-1.0,0.5);
     // reset angle
-    RobotContainer.m_driveSubsystem.pigeonReset();
+    RobotContainer.m_driveSubsystem.tankDrive(1, -1, mod);
     timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    currentAngle = RobotContainer.m_driveSubsystem.getRotation();
+    currTime = timer.get();
+    RobotContainer.m_driveSubsystem.tankDrive(1, -1, mod);
     // pigeonVal= RobotContainer.m_drive_subsystem.getYaw();
     // RobotContainer.m_drive_subsystem.tankDrive(1.0,-1.0,0.5);
     // pid
+    /**
     error = targetDegrees - RobotContainer.m_driveSubsystem.getRotation(); // Error = Target - Actual
     integral += (error*.02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
     derivative = (error - previous_error) / .02;
@@ -68,8 +76,7 @@ public class TurnLeft extends CommandBase {
     // RobotContainer.m_drive_subsystem.tankDrive(leftSpeed, rightSpeed, 0.95);
     double clamped = Math.max(Math.min(0.5, rcw), -0.5);
     RobotContainer.m_driveSubsystem.arcadeDrive(0, clamped);
-    currTime = timer.get();
-
+     */
   }
 
   // Called once the command ends or is interrupted.
@@ -82,7 +89,7 @@ public class TurnLeft extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (currTime >= time);
+    return (currentAngle - startingAngle >= targetDegrees);
     // return (pigeonVal > (pigeonValnit + (targetDegrees/1.2)));
   }
 }

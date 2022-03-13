@@ -15,11 +15,12 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class TurnRight extends CommandBase {
   double pigeonVal;
   double pigeonValnit;
-  double mod = 0.5;
-  double targetDegrees;
+  double mod = 0.8;
+  double targetDegrees, startingAngle;
   double P=0.1, I=0, D =0;
   int integral, previous_error;
   double error, derivative, rcw, time, currTime;
+  double currentAngle;
   Timer timer;
 
   
@@ -29,6 +30,7 @@ public class TurnRight extends CommandBase {
     this.targetDegrees = targetDegrees;
     this.time = time;
     timer = new Timer();
+    RobotContainer.m_driveSubsystem.pigeonReset();
     // drive_subsystem = subsystem;
     // addRequirements(drive_subsystem);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -45,14 +47,18 @@ public class TurnRight extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //get value from pigeon
-    RobotContainer.m_driveSubsystem.pigeonReset();
+    startingAngle = RobotContainer.m_driveSubsystem.getRotation();
+    RobotContainer.m_driveSubsystem.tankDrive(-1, 1, mod);
     timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    currentAngle = RobotContainer.m_driveSubsystem.getRotation();
+    currTime = timer.get();
+    RobotContainer.m_driveSubsystem.tankDrive(-1, 1, mod);
+    /** 
     error = targetDegrees - RobotContainer.m_driveSubsystem.getRotation(); // Error = Target - Actual
     integral += (error*.02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
     derivative = (error - previous_error) / .02;
@@ -62,6 +68,7 @@ public class TurnRight extends CommandBase {
     double clamped = Math.max(Math.min(0.5, rcw), -0.5);
     RobotContainer.m_driveSubsystem.arcadeDrive(0, clamped);
     currTime = timer.get();
+    */
   }
 
   // Called once the command ends or is interrupted.
@@ -74,6 +81,6 @@ public class TurnRight extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (currTime >= time);
+    return (currentAngle >= targetDegrees);
   }
 }

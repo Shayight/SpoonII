@@ -60,10 +60,10 @@ public class ShootingCommand extends CommandBase {
   public void execute() {
     // System.out.println(" exec");
     
-    if (RobotContainer.m_shooterSubsystem.shooterEncoder() >= acc) {//Once at that speed, fire/load balls
+    if (RobotContainer.m_shooterSubsystem.shooterEncoder() >= 21000) {//Once at that speed, fire/load balls
       //17300 for
       //System.out.println("Execute shooter stuff");
-      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,mod);
+      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,1);
       RobotContainer.m_intakeSystem.setFeederSystem(1, 0.7);
       // System.out.println("Shooting "+timer.get());
     } else{

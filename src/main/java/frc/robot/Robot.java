@@ -13,8 +13,10 @@ import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.DriveBackwards;
 import frc.robot.commands.DriveForward;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootingCommand;
 import frc.robot.commands.TestCommand;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -49,12 +51,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    m_robotContainer.SetupDashboard();
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    m_robotContainer.SetupDashboard();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -76,12 +78,21 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {    
     // System.out.println("auto periodic");
+    
     double leftAdjust = -1.0; 
     double rightAdjust = -1.0; // default speed values for chase
-    double mindistance = 5;
+    double mindistance = 10;
     leftAdjust -= m_robotContainer.m_limelight.steeringAdjust();//adjust each side according to tx
     rightAdjust += m_robotContainer.m_limelight.steeringAdjust();
-    System.out.println(m_robotContainer.m_limelight.getDistance());}
+    System.out.println(m_robotContainer.m_limelight.getDistance());
+   // new DriveBackwards(5,5);
+   // new IntakeCommand(5, 5);
+  
+  }
+    
+    
+
+
 
   @Override
   public void teleopInit() {
