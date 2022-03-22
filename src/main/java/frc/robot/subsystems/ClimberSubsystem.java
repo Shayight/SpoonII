@@ -33,15 +33,16 @@ public class ClimberSubsystem extends SubsystemBase {
     climberSolenoid = ph.makeDoubleSolenoid(2, 3);
   }
 
-  public void setClimberSpeed() {
-
+  public void setClimberSpeed(double speed, double mod) {
+    leftMotor.set(speed*mod);
+    rightMotor.set(speed*mod);
   }
 
   public void setClimberSolenoidForward(){
-
+    climberSolenoid.set(Value.kForward);
   }
 
   public void setClimberSolenoidReverse(){
-
+    climberSolenoid.set(Value.kReverse);
   }
 }

@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -14,6 +15,7 @@ import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.ConveyorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootingCommand;
+import frc.robot.commands.TestCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -37,23 +39,31 @@ public class RobotContainer {
   public static PnuematicSubsystem m_pnuematicSubsystem = new PnuematicSubsystem();
 
   public static AutonomousCommand m_autoCommand = new AutonomousCommand();
+  private TestCommand m_tc = new TestCommand();
 
+  //Buttons for commands from the controllers.
   private JoystickButton operator_circleButton;
   private JoystickButton operator_crossButton;
   private JoystickButton operator_shareButton;
   private JoystickButton operator_optionButton;
+  
   private double modifier = 0.6;
 
   //Input from the PS4 Controllers. When calling these, we must define what port the controllers are plugged into (set by the DRIVER STATION).
   public static PS4Controller m_driver = new PS4Controller(0);
   public static PS4Controller m_operator = new PS4Controller(1);
 
-  //Buttons for commands from the controllers.
+  public static SendableChooser<Command> m_chooser = new SendableChooser<>();
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    m_chooser.setDefaultOption("Right",m_tc.Autonomous3());
+    m_chooser.addOption("Left",m_tc.Autonomous1());
+    m_chooser.addOption("Middle",m_tc.Autonomous2());
     //executes the SmartDashboard commands.
-    // SetupDashboard();
+    SetupDashboard();
+
   }
 
   public void driveRobot(){
