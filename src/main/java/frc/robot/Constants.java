@@ -33,6 +33,6 @@ public final class Constants {
      * 2 = right
      */
     //Set this before the game, this will control the autonomous starting mode.
-    public static int autoMode = 2;
+    public static int autoMode = 0;
 
 }

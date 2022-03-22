@@ -4,14 +4,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
-public class IntakeCommand extends CommandBase {
+public class ConveyorCommand extends CommandBase {
     boolean isForward;
     double endTime;
     double currentTime;
     double mod;
     Timer timer = new Timer();
 
-    public IntakeCommand(double speed, double time){
+    public ConveyorCommand(double speed, double time){
         endTime = time;
         mod = speed;
     }
@@ -22,23 +22,20 @@ public class IntakeCommand extends CommandBase {
     RobotContainer.m_pnuematicSubsystem.setIntakeReverse();
     timer.reset();
     timer.start();
-    RobotContainer.m_intakeSystem.setIntakeSystem(0.9, mod);
-    RobotContainer.m_intakeSystem.setFeederSystem(0.7, mod);
+    RobotContainer.m_intakeSystem.setConveyorSpeed(.5, mod);
    }
  
    // Called every time the scheduler runs while the command is scheduled.
    @Override
    public void execute() {
-    RobotContainer.m_intakeSystem.setIntakeSystem(0.9, mod);
-    RobotContainer.m_intakeSystem.setFeederSystem(0.7, mod);
+    RobotContainer.m_intakeSystem.setConveyorSpeed(.5, mod);
     currentTime = timer.get();
    }
  
    // Called once the command ends or is interrupted.
    @Override
    public void end(boolean interrupted) {
-    RobotContainer.m_intakeSystem.setIntakeSystem(1, 0);
-    RobotContainer.m_intakeSystem.setFeederSystem(0.6, 0);
+    RobotContainer.m_intakeSystem.setConveyorSpeed(1, 0);
 
     timer.stop();
    }

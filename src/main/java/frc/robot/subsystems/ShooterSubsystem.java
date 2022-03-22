@@ -24,7 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
         m_rightShooter = new WPI_TalonFX(6);
         //This initializes the motor that's on the turret, which in this case is a NEO 550. You MUST designate this as a brushless motor,
         //as it could potentially damage the motor or motor controller if handled incorrectly.
-        m_turret = new CANSparkMax(12, MotorType.kBrushless);
+        m_turret = new CANSparkMax(25, MotorType.kBrushless);
         //This gets the SparkMAX's (Turret Motor Controller) built-in encoder, which records data from the turret's motor, such as speed, rotation, etc.
 
         m_turretEncoder = m_turret.getEncoder();
@@ -45,7 +45,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void setShooterSpeed(double speed,double modifier) {
 
-        if (speed == 0.0){
+        if (speed == 0.0 || speed > -0.2 && speed < 0.2){
           //If there is no speed/direction input, then there is no reason to power the motor. PercentOutput refers to a value between -1 and 1,
           //where -1 represents -100% throttle, or reverse, 0 for 0% throttle, or not touched, or 1 for 100%, which represents full speed.
             m_rightShooter.set(TalonFXControlMode.PercentOutput,0.0); 

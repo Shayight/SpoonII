@@ -52,24 +52,27 @@ public class ShootingCommand extends CommandBase {
   @Override
   public void initialize() {
     // System.out.println("init ");
-    RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0, 1);
+    timer.reset();
+    timer.start();//Starts the timer
+    RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0, mod);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
     // System.out.println(" exec");
-    
-    if (RobotContainer.m_shooterSubsystem.shooterEncoder() >= 21000) {//Once at that speed, fire/load balls
+
+    if (timer.get() > 1.7) {//After 2 seconds
       //17300 for
       //System.out.println("Execute shooter stuff");
-      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,1);
+      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,mod);
       RobotContainer.m_intakeSystem.setFeederSystem(1, 0.7);
+      RobotContainer.m_intakeSystem.setConveyorSpeed(1, 1);
+
       // System.out.println("Shooting "+timer.get());
     } else{
-      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,1);//Charges falcon motors until they reach certain speed
+      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,mod);//Charges falcon motors until they reach certain speed
       SmartDashboard.putNumber("Shooter Speed", RobotContainer.m_shooterSubsystem.shooterEncoder());
-      timer.start();//Starts the timer
       }
       buttonPressed = RobotContainer.m_operator.getCrossButton();
   }
@@ -82,6 +85,7 @@ public class ShootingCommand extends CommandBase {
     //Stops all motors and resets timer
     RobotContainer.m_shooterSubsystem.setShooterSpeed(0.0,mod);
     RobotContainer.m_intakeSystem.setFeederSystem(0.0, 1);
+    RobotContainer.m_intakeSystem.setConveyorSpeed(0, 0.0);
     timer.reset();
     // System.out.println("Ended");
     SmartDashboard.putBoolean("Shooting", false);

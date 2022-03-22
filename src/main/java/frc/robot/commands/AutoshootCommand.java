@@ -4,23 +4,24 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class AutoshootCommand extends CommandBase{
     Timer timer;
-    boolean buttonPressed;
     double mod;
+    double adjust;
     double maximum = 17300;
-    double acc;
     double currentTime;
     double runTime;
-    Limelight turret_Limelight;
+    Limelight limelight;
+    ShooterSubsystem shooterSys;
   
     // TurretSubsystem turret_subsystem;
     // IntakeSubsystem intake_subsystem;
   
   
     
-    public AutoshootCommand(double modifier, double accuracy, double time) {
+    public AutoshootCommand(double modifier, double time) {
       // System.out.println("constr ");
       // if the button is pressed the command runs, modifier is used to regulate the speed of the shooter for now
       // turret_subsystem = subsystem;
@@ -28,12 +29,11 @@ public class AutoshootCommand extends CommandBase{
       // addRequirements(subsystem);
       // addRequirements(subsystem2);
       timer = new Timer();
-      turret_Limelight = new Limelight("limelight");
+      limelight = new Limelight("limelight");
       // turret_subsystem = new TurretSubsystem();
       // intake_subsystem = new IntakeSubsystem();
       // oi = new OI();
       mod = modifier;
-      acc = accuracy;
       runTime = time;
     }
   
@@ -41,28 +41,30 @@ public class AutoshootCommand extends CommandBase{
     @Override
     public void initialize() {
       RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0, mod);
-      double adjust = turret_Limelight.steeringAdjust();//if there is a target, get the distance from it
+      double adjust = limelight.steeringAdjust();//if there is a target, get the distance from it
       RobotContainer.m_shooterSubsystem.setTurretSpeed(-adjust, 0.25);
+      timer.start();
     }
   
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
-      double adjust = turret_Limelight.steeringAdjust();//if there is a target, get the distance from it
-      RobotContainer.m_shooterSubsystem.setTurretSpeed(-adjust, 0.25);
-          
-      if (RobotContainer.m_shooterSubsystem.shooterEncoder() >= acc) {//Once at that speed, fire/load balls
+      currentTime = timer.get();
+      double adjust = limelight.steeringAdjust();//if there is a target, get the distance from it
+      RobotContainer.m_shooterSubsystem.setTurretSpeed(-adjust, 0.5);
+            
+      if (currentTime >= 2) {//Once at that speed, fire/load balls
           //17300 for
           //System.out.println("Execute shooter stuff");
           RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0, mod);
-          RobotContainer.m_intakeSystem.setFeederSystem(-1, 1);
+          RobotContainer.m_intakeSystem.setFeederSystem(1, 1);
+          RobotContainer.m_intakeSystem.setConveyorSpeed(1, .77);
+
       }
         else{
           RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,mod);//Charges falcon motors until they reach certain speed
-          timer.start();//Starts the timer
         }
   
-        currentTime = timer.get();
         
     }
   
@@ -74,6 +76,8 @@ public class AutoshootCommand extends CommandBase{
       //Stops all motors and resets timer
       RobotContainer.m_shooterSubsystem.setShooterSpeed(0.0, mod);
       RobotContainer.m_intakeSystem.setFeederSystem(0.0,0.0);
+      RobotContainer.m_shooterSubsystem.setTurretSpeed(0, mod);
+      RobotContainer.m_intakeSystem.setConveyorSpeed(1, 0);
       timer.reset();
     }
   

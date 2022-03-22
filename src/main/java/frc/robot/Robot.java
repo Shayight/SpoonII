@@ -71,7 +71,13 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
 
     // schedule the autonomous command (example)
-    new TestCommand().Autonomous3().schedule();
+    if(Constants.autoMode == 0)
+      new TestCommand().Autonomous1().schedule();
+    else if(Constants.autoMode == 1)
+      new TestCommand().Autonomous2().schedule();
+    else if(Constants.autoMode == 2)
+      new TestCommand().Autonomous3().schedule();
+    
   }
 
   /** This function is called periodically during autonomous. */
@@ -108,7 +114,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_robotContainer.shooter(); //activates shooter
     m_robotContainer.driveRobot(); //drives robot
-    m_robotContainer.watchIntakeControls();
+    //m_robotContainer.watchIntakeControls();
     m_robotContainer.PnuematicControl();
   }
 

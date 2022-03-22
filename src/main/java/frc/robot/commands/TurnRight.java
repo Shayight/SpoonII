@@ -15,7 +15,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class TurnRight extends CommandBase {
   double pigeonVal;
   double pigeonValnit;
-  double mod = 0.8;
+  double mod;
   double targetDegrees, startingAngle;
   double P=0.1, I=0, D =0;
   int integral, previous_error;
@@ -26,9 +26,9 @@ public class TurnRight extends CommandBase {
   
   // private final DriveSubsystem drive_subsystem;
 
-  public TurnRight(double targetDegrees, double time) {
+  public TurnRight(double targetDegrees, double mod) {
     this.targetDegrees = targetDegrees;
-    this.time = time;
+    this.mod = mod;
     timer = new Timer();
     RobotContainer.m_driveSubsystem.pigeonReset();
     // drive_subsystem = subsystem;

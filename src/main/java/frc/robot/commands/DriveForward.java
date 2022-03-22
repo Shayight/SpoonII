@@ -9,16 +9,15 @@ public class DriveForward extends CommandBase {
     double distance;
     double mod;
 
-    //This command will drive the robot forward when called. Speed refers to the 
     public DriveForward(double speed, double distanceToTravel){
         distance = -distanceToTravel;
         mod = -speed;
-        RobotContainer.m_driveSubsystem.encoderReset();
     }
 
     @Override
     public void initialize() {
         //gets the initial position of the encoder, and starts driving the robot.
+        RobotContainer.m_driveSubsystem.encoderReset();
         initialPosition = 0;
         RobotContainer.m_driveSubsystem.tankDrive(1.0, 1.0, mod);
     }

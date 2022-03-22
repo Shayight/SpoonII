@@ -27,9 +27,9 @@ public class TurnLeft extends CommandBase {
   
   // private final DriveSubsystem drive_subsystem;
 
-  public TurnLeft(double targetDegrees, double time) {
+  public TurnLeft(double targetDegrees, double mod) {
     this.targetDegrees = targetDegrees;
-    this.time = time;
+    this.mod = mod;
     timer = new Timer();
     RobotContainer.m_driveSubsystem.pigeonReset();
     // drive_subsystem = subsystem;
@@ -48,7 +48,6 @@ public class TurnLeft extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startingAngle = RobotContainer.m_driveSubsystem.getRotation();
     //get value from pigeon
     // pigeonValnit = RobotContainer.m_drive_subsystem.getYaw();
     // RobotContainer.m_drive_subsystem.tankDrive(1.0,-1.0,0.5);
@@ -89,7 +88,7 @@ public class TurnLeft extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (currentAngle - startingAngle >= targetDegrees);
+    return (currentAngle >= targetDegrees);
     // return (pigeonVal > (pigeonValnit + (targetDegrees/1.2)));
   }
 }
