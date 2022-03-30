@@ -37,7 +37,7 @@ public class Limelight extends SubsystemBase {
 
     //Gets the Y (vertical) axis of the target relative to the center of the camera.
     public double offsetY() {
-        return table.getEntry("ty").getDouble(0.00);
+        return table.getEntry("ty").getDouble(0.0);
     }
 
     //Checks what percent of the camera lens the target is occupying.

@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,7 +28,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
-  private AutonomousCommand m_autoCommand;
+  private Command m_autoCommand;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -36,10 +37,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    CameraServer.startAutomaticCapture();
     m_robotContainer = new RobotContainer(); 
     m_robotContainer.m_driveSubsystem.getLinearDistanceEncoder();
     m_robotContainer.m_driveSubsystem.getRotation();
-    m_autoCommand = new AutonomousCommand();
+    //m_autoCommand = new AutonomousCommand();
   }
 
   /**
@@ -69,15 +71,13 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_autoCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
-    if(Constants.autoMode == 0)
-      new TestCommand().Autonomous1().schedule();
-    else if(Constants.autoMode == 1)
-      new TestCommand().Autonomous2().schedule();
-    else if(Constants.autoMode == 2)
-      new TestCommand().Autonomous3().schedule();
-    
+    if (m_autoCommand != null) {
+      m_autoCommand.schedule();
+    }
+
   }
 
   /** This function is called periodically during autonomous. */
