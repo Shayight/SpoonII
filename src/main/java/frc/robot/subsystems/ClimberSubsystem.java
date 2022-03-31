@@ -30,10 +30,12 @@ public class ClimberSubsystem extends SubsystemBase {
     rightMotor = new CANSparkMax(17, MotorType.kBrushless);
     leftEncoder = leftMotor.getEncoder();
     rightEncoder = rightMotor.getEncoder();
-    climberSolenoid = ph.makeDoubleSolenoid(2, 3);
+    climberSolenoid = ph.makeDoubleSolenoid(3,4);
   }
 
   public void setClimberSpeed(double speed, double mod) {
+    leftMotor.setInverted(false);
+    rightMotor.setInverted(false);
     leftMotor.set(speed*mod);
     rightMotor.set(speed*mod);
   }

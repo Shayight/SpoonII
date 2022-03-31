@@ -26,7 +26,6 @@ public class ShooterSubsystem extends SubsystemBase {
         //as it could potentially damage the motor or motor controller if handled incorrectly.
         m_turret = new CANSparkMax(25, MotorType.kBrushless);
         //This gets the SparkMAX's (Turret Motor Controller) built-in encoder, which records data from the turret's motor, such as speed, rotation, etc.
-
         m_turretEncoder = m_turret.getEncoder();
 
         //The shooter should NOT be able to spin when the motor is not active in code, so we set them to brake, locking them in place.
@@ -45,7 +44,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void setShooterSpeed(double speed,double modifier) {
 
-        if (speed == 0.0 || speed > -0.2 && speed < 0.2){
+        if (speed == 0.0){
           //If there is no speed/direction input, then there is no reason to power the motor. PercentOutput refers to a value between -1 and 1,
           //where -1 represents -100% throttle, or reverse, 0 for 0% throttle, or not touched, or 1 for 100%, which represents full speed.
             m_rightShooter.set(TalonFXControlMode.PercentOutput,0.0); 
@@ -60,7 +59,10 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setTurretSpeed(double speed, double modifier) {
       //rotates turret based on speed/direction, a value between -1 and 1, and the modifier, which can be a value between 0 and 1
       //if(getTurretRotation() >= -90 && getTurretRotation() <= 90)
-      m_turret.set(speed*modifier);
+      if(speed > -0.10 && speed < 0.10)
+        m_turret.set(0);
+      else
+        m_turret.set(speed*modifier);
       /**else if(getTurretRotation() <= -90)
         m_turret.set(.25);
       else if(getTurretRotation() >= 90)

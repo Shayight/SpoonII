@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -16,6 +17,8 @@ import frc.robot.commands.ConveyorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootingCommand;
 import frc.robot.commands.TestCommand;
+import frc.robot.commands.TurnLeft;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -37,6 +40,7 @@ public class RobotContainer {
   public static ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   public static Limelight m_limelight = new Limelight("limelight");
   public static PnuematicSubsystem m_pnuematicSubsystem = new PnuematicSubsystem();
+  public static ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
 
   public static AutonomousCommand m_autoCommand = new AutonomousCommand();
   private TestCommand m_tc = new TestCommand();
@@ -46,12 +50,22 @@ public class RobotContainer {
   private JoystickButton operator_crossButton;
   private JoystickButton operator_shareButton;
   private JoystickButton operator_optionButton;
+  private boolean operator_L1;
+  private boolean operator_R1;
+  private boolean operator_L2;
+  private boolean operator_R2;
+
+  private JoystickButton test_circleButton;
+  private JoystickButton test_crossButton;
+  private JoystickButton test_squareButton;
+  private JoystickButton test_triangleButton;
   
   private double modifier = 0.6;
 
   //Input from the PS4 Controllers. When calling these, we must define what port the controllers are plugged into (set by the DRIVER STATION).
   public static PS4Controller m_driver = new PS4Controller(0);
   public static PS4Controller m_operator = new PS4Controller(1);
+  public static PS4Controller m_testing = new PS4Controller(2);
 
   public static SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -69,7 +83,7 @@ public class RobotContainer {
   public void driveRobot(){
     double driveLS = m_driver.getLeftY(); //gets Y axis (the up and down) of the left stick for the driver's controller (port 0).
     double driveRS = m_driver.getRightY(); //gets Y axis of the right stick for the driver's controller (port 0).
-    m_driveSubsystem.tankDrive(driveLS, driveRS, 1);  //The driver is able to control the robot using tank drive.
+    m_driveSubsystem.tankDrive(driveLS, driveRS, 0.9);  //The driver is able to control the robot using tank drive.
   }
 
   public void watchIntakeControls() {
@@ -79,19 +93,30 @@ public class RobotContainer {
   }
 
   public void ShooterInit(){
+    
     operator_circleButton = new JoystickButton(m_operator, PS4Controller.Button.kCircle.value);
     operator_crossButton = new JoystickButton(m_operator, PS4Controller.Button.kCross.value);
     operator_shareButton = new JoystickButton(m_operator, PS4Controller.Button.kShare.value);
     operator_optionButton = new JoystickButton(m_operator, PS4Controller.Button.kOptions.value);
 
+    test_circleButton = new JoystickButton(m_testing, PS4Controller.Button.kCircle.value);
+    test_crossButton = new JoystickButton(m_testing, PS4Controller.Button.kCross.value);
+    test_squareButton = new JoystickButton(m_testing, PS4Controller.Button.kSquare.value);
+    test_triangleButton = new JoystickButton(m_testing, PS4Controller.Button.kTriangle.value);
+
+    test_circleButton.whenActive(new TurnLeft(-90, 0.9));
+
+
+
 
     double maxDistance = 80;
     modifier = m_limelight.getDistance()/maxDistance;
 
+
     operator_circleButton.whenActive(new AutoAimCommand(0.6));
     operator_crossButton.whenActive(new ShootingCommand(0.8, 7000));
     //operator_shareButton.whenActive(new IntakeCommand(0.8, 1));
-    operator_optionButton.whenActive(new ConveyorCommand(0.8, 2));
+    operator_optionButton.whenHeld(new ConveyorCommand(0.8, 2), true);
 
   }
 
@@ -102,6 +127,24 @@ public class RobotContainer {
     boolean driver_L2 = m_driver.getL2Button();
     boolean driver_R2 = m_driver.getR2Button();
 
+    
+    operator_L1 = m_operator.getL1Button();
+    operator_L2 = m_operator.getL2Button();
+    operator_R1 = m_operator.getR1Button();
+    operator_R2 = m_operator.getR2Button();
+
+    if(operator_L1)
+      m_climberSubsystem.setClimberSpeed(1, 0.6);
+    else if(operator_R1)
+      m_climberSubsystem.setClimberSpeed(-1, 0.6);
+    else
+      m_climberSubsystem.setClimberSpeed(0, 1);
+    
+    if(operator_L2)
+      m_climberSubsystem.setClimberSolenoidForward();
+    else if(operator_R2)
+      m_climberSubsystem.setClimberSolenoidReverse();
+
     if(driver_L2){
       m_intakeSystem.setIntakeSystem(1, 0.7);
     }else if(driver_R2){
@@ -110,7 +153,9 @@ public class RobotContainer {
       m_intakeSystem.setIntakeSystem(0, 1);
     }
 
-    boolean feederButton = m_operator.getL1Button();
+
+
+    boolean feederButton = m_operator.getShareButton();
     m_shooterSubsystem.setTurretSpeed(-turretInput, 1);
 
 
@@ -144,6 +189,11 @@ public class RobotContainer {
       m_pnuematicSubsystem.setIntakeReverse();
   }
 
+  public Command getAutonomousCommand() {
+    return m_chooser.getSelected();
+  }
+
+
   /**
    * The intention of this method is to setup the Smart Dashboard to display global output values, such as distance, rotation, etc.
    */
@@ -151,5 +201,9 @@ public class RobotContainer {
     SmartDashboard.putNumber("Turret Encoder Rotation", m_shooterSubsystem.getTurretRotation());
     SmartDashboard.putNumber("Distance travelled (in inches)",m_driveSubsystem.getLinearDistanceEncoder());
     SmartDashboard.putNumber("Distance from Objective", m_limelight.getDistance());
+    SmartDashboard.putNumber("Motor Speed", m_driveSubsystem.getCurrentMotorSpeed());
+    SmartDashboard.putBoolean("Target Locked", m_limelight.canSeeTarget());
+
+    SmartDashboard.putData(m_chooser);
   }
 }

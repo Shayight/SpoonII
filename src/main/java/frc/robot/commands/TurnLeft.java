@@ -18,9 +18,9 @@ public class TurnLeft extends CommandBase {
   double mod = 0.5;
   double startingAngle;
   double targetDegrees;
-  double P=0.1, I=0, D =0;
-  int integral, previous_error;
-  double error,derivative,rcw,time, currTime;
+  double P=20, I=0, D =0;
+  double errorSum = 0, lastTimestamp = 0;
+  double error,time, currTime;
   double currentAngle;
   Timer timer;
 
@@ -52,7 +52,10 @@ public class TurnLeft extends CommandBase {
     // pigeonValnit = RobotContainer.m_drive_subsystem.getYaw();
     // RobotContainer.m_drive_subsystem.tankDrive(1.0,-1.0,0.5);
     // reset angle
-    RobotContainer.m_driveSubsystem.tankDrive(1, -1, mod);
+    errorSum = 0;
+    lastTimestamp = Timer.getFPGATimestamp();
+    startingAngle = RobotContainer.m_driveSubsystem.getRotation();
+    //RobotContainer.m_driveSubsystem.tankDrive(1, -1, mod);
     timer.start();
   }
 
@@ -61,34 +64,33 @@ public class TurnLeft extends CommandBase {
   public void execute() {
     currentAngle = RobotContainer.m_driveSubsystem.getRotation();
     currTime = timer.get();
-    //RobotContainer.m_driveSubsystem.tankDrive(1, -1, mod);
     // pigeonVal= RobotContainer.m_drive_subsystem.getYaw();
     // RobotContainer.m_drive_subsystem.tankDrive(1.0,-1.0,0.5);
     // pid
-    
-    error = targetDegrees - RobotContainer.m_driveSubsystem.getRotation(); // Error = Target - Actual
-    integral += (error*.02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
-    derivative = (error - previous_error) / .02;
-    rcw = P*error + I*integral + D*derivative;
-    System.out.println(rcw);
+    double dt = Timer.getFPGATimestamp() - lastTimestamp;
 
-    // RobotContainer.m_drive_subsystem.tankDrive(leftSpeed, rightSpeed, 0.95);
-    double clamped = Math.max(Math.min(0.5, rcw), -0.5);
-    RobotContainer.m_driveSubsystem.arcadeDrive(0, clamped);
-    
+    error = targetDegrees + RobotContainer.m_driveSubsystem.getRotation(); // Error = Target - Actual
+    errorSum += error * dt;
+
+
+    double finalMotorSpeed = (P * error + I * errorSum);
+    double clampedSpeed = Math.max(Math.min(-1,finalMotorSpeed*mod),1);
+    RobotContainer.m_driveSubsystem.tankDrive(clampedSpeed,-clampedSpeed,1);
+
+    lastTimestamp = Timer.getFPGATimestamp();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.m_driveSubsystem.tankDrive(0.0, 0.0, mod);
+    RobotContainer.m_driveSubsystem.arcadeDrive(0.0, 0);
     timer.reset();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (currentAngle >= targetDegrees);
+    return (currentAngle <= targetDegrees);
     // return (pigeonVal > (pigeonValnit + (targetDegrees/1.2)));
   }
 }
