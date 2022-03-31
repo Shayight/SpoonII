@@ -57,8 +57,8 @@ public class TurnRight extends CommandBase {
   public void execute() {
     currentAngle = RobotContainer.m_driveSubsystem.getRotation();
     currTime = timer.get();
-    RobotContainer.m_driveSubsystem.tankDrive(-1, 1, mod);
-    /** 
+    //RobotContainer.m_driveSubsystem.tankDrive(-1, 1, mod);
+    
     error = targetDegrees - RobotContainer.m_driveSubsystem.getRotation(); // Error = Target - Actual
     integral += (error*.02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
     derivative = (error - previous_error) / .02;
@@ -67,8 +67,7 @@ public class TurnRight extends CommandBase {
 
     double clamped = Math.max(Math.min(0.5, rcw), -0.5);
     RobotContainer.m_driveSubsystem.arcadeDrive(0, clamped);
-    currTime = timer.get();
-    */
+    
   }
 
   // Called once the command ends or is interrupted.
