@@ -18,9 +18,9 @@ public class TurnLeft extends CommandBase {
   double mod = 0.5;
   double startingAngle;
   double targetDegrees;
-  double P=0.3, I=0, D =0;
-  int integral, previous_error;
-  double error,derivative,rcw,time, currTime;
+  double P=20, I=0, D =0;
+  double errorSum = 0, lastTimestamp = 0;
+  double error,time, currTime;
   double currentAngle;
   Timer timer;
 
@@ -52,6 +52,8 @@ public class TurnLeft extends CommandBase {
     // pigeonValnit = RobotContainer.m_drive_subsystem.getYaw();
     // RobotContainer.m_drive_subsystem.tankDrive(1.0,-1.0,0.5);
     // reset angle
+    errorSum = 0;
+    lastTimestamp = Timer.getFPGATimestamp();
     startingAngle = RobotContainer.m_driveSubsystem.getRotation();
     //RobotContainer.m_driveSubsystem.tankDrive(1, -1, mod);
     timer.start();
@@ -65,12 +67,17 @@ public class TurnLeft extends CommandBase {
     // pigeonVal= RobotContainer.m_drive_subsystem.getYaw();
     // RobotContainer.m_drive_subsystem.tankDrive(1.0,-1.0,0.5);
     // pid
-  
-    error = targetDegrees + RobotContainer.m_driveSubsystem.getRotation(); // Error = Target - Actual
-    double finalMotorSpeed = P * error;
-    double clampedSpeed = Math.max(Math.min(finalMotorSpeed,-1),1);
-    RobotContainer.m_driveSubsystem.arcadeDrive(0,finalMotorSpeed);
+    double dt = Timer.getFPGATimestamp() - lastTimestamp;
 
+    error = targetDegrees + RobotContainer.m_driveSubsystem.getRotation(); // Error = Target - Actual
+    errorSum += error * dt;
+
+
+    double finalMotorSpeed = (P * error + I * errorSum);
+    double clampedSpeed = Math.max(Math.min(-1,finalMotorSpeed*mod),1);
+    RobotContainer.m_driveSubsystem.tankDrive(clampedSpeed,-clampedSpeed,1);
+
+    lastTimestamp = Timer.getFPGATimestamp();
   }
 
   // Called once the command ends or is interrupted.
@@ -83,7 +90,7 @@ public class TurnLeft extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (currentAngle <= -targetDegrees);
+    return (currentAngle <= targetDegrees);
     // return (pigeonVal > (pigeonValnit + (targetDegrees/1.2)));
   }
 }

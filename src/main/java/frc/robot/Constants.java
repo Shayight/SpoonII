@@ -35,4 +35,10 @@ public final class Constants {
     //Set this before the game, this will control the autonomous starting mode.
     public static int autoMode = 0;
 
+    //Steering PIDs 
+    public static double sP = 0.1;
+    public static double sI = 0.01;
+    public static double sD = 0;
+
+
 }

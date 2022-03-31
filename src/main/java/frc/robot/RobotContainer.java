@@ -93,6 +93,7 @@ public class RobotContainer {
   }
 
   public void ShooterInit(){
+    
     operator_circleButton = new JoystickButton(m_operator, PS4Controller.Button.kCircle.value);
     operator_crossButton = new JoystickButton(m_operator, PS4Controller.Button.kCross.value);
     operator_shareButton = new JoystickButton(m_operator, PS4Controller.Button.kShare.value);
@@ -103,7 +104,7 @@ public class RobotContainer {
     test_squareButton = new JoystickButton(m_testing, PS4Controller.Button.kSquare.value);
     test_triangleButton = new JoystickButton(m_testing, PS4Controller.Button.kTriangle.value);
 
-    test_circleButton.whenActive(new TurnLeft(90, 1));
+    test_circleButton.whenActive(new TurnLeft(-90, 0.9));
 
 
 
@@ -200,6 +201,9 @@ public class RobotContainer {
     SmartDashboard.putNumber("Turret Encoder Rotation", m_shooterSubsystem.getTurretRotation());
     SmartDashboard.putNumber("Distance travelled (in inches)",m_driveSubsystem.getLinearDistanceEncoder());
     SmartDashboard.putNumber("Distance from Objective", m_limelight.getDistance());
+    SmartDashboard.putNumber("Motor Speed", m_driveSubsystem.getCurrentMotorSpeed());
+    SmartDashboard.putBoolean("Target Locked", m_limelight.canSeeTarget());
+
     SmartDashboard.putData(m_chooser);
   }
 }

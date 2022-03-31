@@ -103,6 +103,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_FLEncoder.resetEncoder();
   }
 
+  public double getCurrentMotorSpeed(){
+    //Gets the current motor speed (FL)
+    return m_FL.getMotorOutputPercent();
+  }
+
   //This gets the current angle of the Pigeon IMU, or rather the direction of the robot.
   public double getRotation() {
     /**
