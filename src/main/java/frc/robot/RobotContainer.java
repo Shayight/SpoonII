@@ -99,13 +99,6 @@ public class RobotContainer {
     operator_shareButton = new JoystickButton(m_operator, PS4Controller.Button.kShare.value);
     operator_optionButton = new JoystickButton(m_operator, PS4Controller.Button.kOptions.value);
 
-    test_circleButton = new JoystickButton(m_testing, PS4Controller.Button.kCircle.value);
-    test_crossButton = new JoystickButton(m_testing, PS4Controller.Button.kCross.value);
-    test_squareButton = new JoystickButton(m_testing, PS4Controller.Button.kSquare.value);
-    test_triangleButton = new JoystickButton(m_testing, PS4Controller.Button.kTriangle.value);
-
-    test_circleButton.whenActive(new TurnLeft(-90, 0.9));
-
 
 
 
@@ -193,6 +186,14 @@ public class RobotContainer {
     return m_chooser.getSelected();
   }
 
+  public void testing(){
+    test_circleButton = new JoystickButton(m_testing, PS4Controller.Button.kCircle.value);
+    test_crossButton = new JoystickButton(m_testing, PS4Controller.Button.kCross.value);
+    test_squareButton = new JoystickButton(m_testing, PS4Controller.Button.kSquare.value);
+    test_triangleButton = new JoystickButton(m_testing, PS4Controller.Button.kTriangle.value);
+
+    test_circleButton.whenActive(new TurnLeft(-90, 0.9));
+  }
 
   /**
    * The intention of this method is to setup the Smart Dashboard to display global output values, such as distance, rotation, etc.
