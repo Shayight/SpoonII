@@ -90,7 +90,7 @@ public class TurnLeft extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (currentAngle <= targetDegrees);
+    return (currentAngle >= targetDegrees);
     // return (pigeonVal > (pigeonValnit + (targetDegrees/1.2)));
   }
 }

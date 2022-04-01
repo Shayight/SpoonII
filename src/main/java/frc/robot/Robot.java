@@ -114,8 +114,10 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_robotContainer.shooter(); //activates shooter
     m_robotContainer.driveRobot(); //drives robot
-    //m_robotContainer.watchIntakeControls();
+    m_robotContainer.watchIntakeControls();
     m_robotContainer.PnuematicControl();
+    //m_robotContainer.testing();
+
   }
 
   @Override
@@ -127,6 +129,5 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    m_robotContainer.testing();
   }
 }
