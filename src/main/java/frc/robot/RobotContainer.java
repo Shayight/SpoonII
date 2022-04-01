@@ -192,7 +192,7 @@ public class RobotContainer {
     test_squareButton = new JoystickButton(m_testing, PS4Controller.Button.kSquare.value);
     test_triangleButton = new JoystickButton(m_testing, PS4Controller.Button.kTriangle.value);
 
-    test_circleButton.whenActive(new TurnLeft(-90, 0.9));
+    test_circleButton.whenActive(new TurnLeft(90, 0.5));
   }
 
   /**
