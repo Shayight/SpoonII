@@ -107,6 +107,7 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     m_robotContainer.ShooterInit();
+    m_robotContainer.testing();
   }
 
   /** This function is called periodically during operator control. */
@@ -114,9 +115,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_robotContainer.shooter(); //activates shooter
     m_robotContainer.driveRobot(); //drives robot
-    m_robotContainer.watchIntakeControls();
-    m_robotContainer.PnuematicControl();
-    //m_robotContainer.testing();
+    //m_robotContainer.watchIntakeControls();
 
   }
 

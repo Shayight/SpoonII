@@ -74,7 +74,7 @@ public class ShootingCommand extends CommandBase {
       RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,mod);//Charges falcon motors until they reach certain speed
       SmartDashboard.putNumber("Shooter Speed", RobotContainer.m_shooterSubsystem.shooterEncoder());
       }
-      buttonPressed = RobotContainer.m_operator.getCrossButton();
+      buttonPressed = RobotContainer.m_controllerSubsystem.m_operatorController.getB();
   }
 
 

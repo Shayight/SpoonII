@@ -18,7 +18,7 @@ public class TurnLeft extends CommandBase {
   double mod = 0.5;
   double startingAngle;
   double targetDegrees;
-  double P=20, I=0, D =0;
+  double P=0.2, I=20, D =0;
   double errorSum = 0, lastTimestamp = 0;
   double error,time, currTime;
   double currentAngle;
@@ -28,7 +28,7 @@ public class TurnLeft extends CommandBase {
   // private final DriveSubsystem drive_subsystem;
 
   public TurnLeft(double targetDegrees, double mod) {
-    this.targetDegrees = targetDegrees;
+    this.targetDegrees = -targetDegrees;
     this.mod = mod;
     timer = new Timer();
     RobotContainer.m_driveSubsystem.pigeonReset();
@@ -69,13 +69,13 @@ public class TurnLeft extends CommandBase {
     // pid
     double dt = Timer.getFPGATimestamp() - lastTimestamp;
 
-    error = targetDegrees + RobotContainer.m_driveSubsystem.getRotation(); // Error = Target - Actual
+    error = (targetDegrees + RobotContainer.m_driveSubsystem.getRotation())/360; // Error = Target - Actual
     errorSum += error * dt;
 
 
     double finalMotorSpeed = (P * error + I * errorSum);
     double clampedSpeed = Math.max(Math.min(-1,finalMotorSpeed*mod),1);
-    RobotContainer.m_driveSubsystem.tankDrive(clampedSpeed,-clampedSpeed,1);
+    RobotContainer.m_driveSubsystem.arcadeDrive(0, clampedSpeed);
 
     lastTimestamp = Timer.getFPGATimestamp();
   }
@@ -90,7 +90,14 @@ public class TurnLeft extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (currentAngle >= targetDegrees);
+    if(currentAngle <= targetDegrees + 1 && currentAngle <= targetDegrees - 1){
+      timer.reset();
+      timer.start();
+      return false;
+    }else if(timer.get() >= 1 && currentAngle <= targetDegrees + 1 && currentAngle <= targetDegrees - 1){
+      return true;
+    }
     // return (pigeonVal > (pigeonValnit + (targetDegrees/1.2)));
+    return currTime >= 5;
   }
 }

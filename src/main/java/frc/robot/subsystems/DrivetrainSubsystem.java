@@ -118,6 +118,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     return pigeon.getAngle();
   }
 
+  
+  public double getAngularAcceleration(){
+    return pigeon.getRate();
+  }
+
   public double getLinearDistanceEncoder() {
 
     distanceTotal = m_FLEncoder.getPositionMeters();
