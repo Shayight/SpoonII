@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.ConveyorCommand;
+import frc.robot.commands.DriveForward;
+import frc.robot.commands.PIDDriveCommand;
 import frc.robot.commands.PIDTurnLeft;
 import frc.robot.commands.ShootingCommand;
 import frc.robot.commands.TurnLeft;
@@ -45,8 +47,10 @@ public class ControllerSubsystem extends SubsystemBase {
 
   public void CommandController(){
 
-      m_operatorController.A.whenActive(new AutoAimCommand(0.6));
-      m_operatorController.B.whenActive(new ShootingCommand(modifier, 7000));
+
+
+      m_operatorController.A.whenActive(new AutoAimCommand(0.5));
+      m_operatorController.B.whenActive(new ShootingCommand(0.68, 7000));
 
       m_operatorController.LB.whenHeld(new ConveyorCommand(0.8, 2), true);
 
@@ -71,8 +75,7 @@ public class ControllerSubsystem extends SubsystemBase {
   }
 
   public void operatorPeriodic(){
-    double maxDistance = 170.59;
-    modifier = RobotContainer.m_limelight.getDistance()/maxDistance;
+
 
     
     if(m_operatorController.getPOVHorizontal() == 1)
@@ -88,10 +91,14 @@ public class ControllerSubsystem extends SubsystemBase {
     else
     RobotContainer.m_climberSubsystem.setClimberSpeed(0, 1);
 
-    RobotContainer.m_intakeSystem.setConveyorSpeed(-m_operatorController.getYAxis(), .7);
+    RobotContainer.m_intakeSystem.setConveyorSpeed(-m_operatorController.getYAxis(), .45);
     RobotContainer.m_intakeSystem.setFeederSystem(-m_operatorController.getYAxis(), .6);
 
-    RobotContainer.m_shooterSubsystem.setTurretSpeed(-m_operatorController.getXAxis(), .6);
+    RobotContainer.m_shooterSubsystem.setTurretSpeed(-m_operatorController.getXAxis(), .4);
+
+    double maxDistance = 170.59;
+    modifier = RobotContainer.m_limelight.getDistance()/maxDistance;
+
     SmartDashboard.putNumber("Turret Modifier", modifier);
 
     if(m_operatorController.RB.getAsBoolean()){
@@ -116,8 +123,11 @@ public class ControllerSubsystem extends SubsystemBase {
 
   public void testingInit(){
 
-    RobotContainer.m_controllerSubsystem.m_operatorController.X.whenActive(new PIDTurnLeft(90, 0.6));
-
+    m_operatorController.X.whenActive(new PIDTurnLeft(90, 0.9));
+    //m_operatorController.Y.whenActive(new PIDDriveCommand(48, 0.9));
+    
+    //m_operatorController.Y.whenActive(new DriveForward(0.9, 50));
+    m_operatorController.Y.whenActive(new PIDDriveCommand(50, 0.9));
   }
 
 

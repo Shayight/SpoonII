@@ -2,11 +2,10 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,6 +26,14 @@ public class ShooterSubsystem extends SubsystemBase {
         m_turret = new CANSparkMax(25, MotorType.kBrushless);
         //This gets the SparkMAX's (Turret Motor Controller) built-in encoder, which records data from the turret's motor, such as speed, rotation, etc.
         m_turretEncoder = m_turret.getEncoder();
+
+        m_turretEncoder.setPosition(0);
+
+        m_turret.enableSoftLimit(SoftLimitDirection.kForward, true);
+        m_turret.setSoftLimit(SoftLimitDirection.kForward, 1073);
+
+        m_turret.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        m_turret.setSoftLimit(SoftLimitDirection.kReverse, -1073);
 
         //The shooter should NOT be able to spin when the motor is not active in code, so we set them to brake, locking them in place.
         m_rightShooter.setNeutralMode(NeutralMode.Brake); 
@@ -86,10 +93,14 @@ public class ShooterSubsystem extends SubsystemBase {
        */
       double convFactor = 360/42;
       //This line applies the conversion factor to the encoder to convert it into degrees.
-      m_turretEncoder.setPositionConversionFactor(convFactor);
+      //m_turretEncoder.setPositionConversionFactor(convFactor);
       //This returns the value of the Encoder position after applying the conversion factor.
-      double x = m_turretEncoder.getPosition() / 7;
+      double x = (m_turretEncoder.getPosition()*convFactor) / 7;
       //This returns the Encoder value to the function where it is called.
       return x; 
+    }
+
+    public double getRawTurretRotation(){
+      return m_turretEncoder.getPosition();
     }
 }

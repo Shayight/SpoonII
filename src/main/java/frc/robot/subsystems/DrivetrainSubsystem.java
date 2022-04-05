@@ -49,6 +49,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * This allows us to control both of these motors as one group.
      */
     m_leftSide = new MotorControllerGroup(m_FL, m_RL);
+    m_leftSide.setInverted(true);
 
     /**
      * As of 2022, we MUST set one side to be inverted, 
@@ -64,11 +65,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_RR.setNeutralMode(NeutralMode.Brake);
 
     m_rightSide = new MotorControllerGroup(m_FR, m_RR);
-    m_rightSide.setInverted(true);
-    
+    m_rightSide.setInverted(false);
 
     //Finally, we need to combine the two sides into one drive that can be controlled autonomously or by a driver.
     m_drive = new DifferentialDrive(m_leftSide,m_rightSide);
+
+    double modifier = 0.5;
+
+    m_FL.configClosedloopRamp(modifier);
+    m_FR.configClosedloopRamp(modifier);
+    m_RL.configClosedloopRamp(modifier);
+    m_RR.configClosedloopRamp(modifier);
+
+    m_FL.configOpenloopRamp(0);
+    m_FR.configOpenloopRamp(0);
+    m_RL.configOpenloopRamp(0);
+    m_RR.configOpenloopRamp(0);
+
 
     //Because the Pigeon IMU is connected over a CAN bus rather than to a TalonSRX, we can use a CAN ID for it.
     pigeon = new WPI_PigeonIMU(5);
@@ -86,8 +99,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
    * @param speedRight The speed/direction of the right side of the robot (1 to 1).
    * @param mod The modifier value for the drivetrain that limits the speed of the robot (between 0 and 1, can be a decimal value).
    */
-  public void tankDrive(double speedLeft, double speedRight, double mod){
-      m_drive.tankDrive(speedLeft*mod*speedLimit, speedRight*mod*speedLimit);
+  public void tankDrive(double speedLeft, double speedRight){
+      m_drive.tankDrive(speedLeft, speedRight);
       SmartDashboard.putNumber("Current Angle of Robot",getRotation());
   }
 
@@ -96,6 +109,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void pigeonReset(){
+    pigeon.setYaw(0);
     pigeon.reset();
   }
 

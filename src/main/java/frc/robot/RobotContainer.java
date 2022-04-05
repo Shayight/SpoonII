@@ -65,9 +65,9 @@ public class RobotContainer {
   }
 
   public void driveRobot(){
-    double driveLS = m_driver.getLeftY(); //gets Y axis (the up and down) of the left stick for the driver's controller (port 0).
-    double driveRS = m_driver.getRightY(); //gets Y axis of the right stick for the driver's controller (port 0).
-    m_driveSubsystem.tankDrive(driveLS, driveRS, 0.9);  //The driver is able to control the robot using tank drive.
+    double driveLS = -m_driver.getLeftY(); //gets Y axis (the up and down) of the left stick for the driver's controller (port 0).
+    double driveRS = -m_driver.getRightY(); //gets Y axis of the right stick for the driver's controller (port 0).
+    m_driveSubsystem.tankDrive(driveLS*.9, driveRS*.9);  //The driver is able to control the robot using tank drive.
   }
 
   /**  public void watchIntakeControls() {
@@ -101,7 +101,7 @@ public class RobotContainer {
    * The intention of this method is to setup the Smart Dashboard to display global output values, such as distance, rotation, etc.
    */
   public void SetupDashboard(){
-    SmartDashboard.putNumber("Turret Encoder Rotation", m_shooterSubsystem.getTurretRotation());
+    SmartDashboard.putNumber("Turret Encoder Rotation", m_shooterSubsystem.getRawTurretRotation());
     SmartDashboard.putNumber("Distance travelled (in inches)",m_driveSubsystem.getLinearDistanceEncoder());
     SmartDashboard.putNumber("Distance from Objective", m_limelight.getDistance());
     SmartDashboard.putNumber("Motor Speed", m_driveSubsystem.getCurrentMotorSpeed());

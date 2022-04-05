@@ -20,20 +20,20 @@ public class DriveBackwards extends CommandBase {
         //gets the initial position of the encoder, and starts driving the robot.
         RobotContainer.m_driveSubsystem.encoderReset();
         initialPosition = RobotContainer.m_driveSubsystem.getLinearDistanceEncoder();
-        RobotContainer.m_driveSubsystem.tankDrive(-1.0, -1.0, mod);
+        RobotContainer.m_driveSubsystem.tankDrive(-1.0, -1.0);
     }
 
     @Override
     public void execute() {
         //Measures the current position of the robot, and continues powering the drivetrain.
         currentPosition = RobotContainer.m_driveSubsystem.getLinearDistanceEncoder();
-        RobotContainer.m_driveSubsystem.tankDrive(-1, -1, mod);
+        RobotContainer.m_driveSubsystem.tankDrive(-1, -1);
     }
 
     @Override
     public void end(boolean interrupted) {
         //Stop the robot from moving after the command ends.
-        RobotContainer.m_driveSubsystem.tankDrive(0.0, 0.0, mod);
+        RobotContainer.m_driveSubsystem.tankDrive(0.0, 0.0);
     }
 
     // Make this return true when this Command no longer needs to run execute()

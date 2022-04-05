@@ -15,6 +15,8 @@ import com.ctre.phoenix.motorcontrol.can.*; //Talon FX
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode; //Neutral mode for the Falcons
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
@@ -44,7 +46,7 @@ public class ShootingCommand extends CommandBase {
     // turret_subsystem = new TurretSubsystem();
     // intake_subsystem = new IntakeSubsystem();
     // oi = new OI();
-    mod = modifier;
+    //mod = modifier;
     acc = accuracy;
   }
 
@@ -54,18 +56,26 @@ public class ShootingCommand extends CommandBase {
     // System.out.println("init ");
     timer.reset();
     timer.start();//Starts the timer
-    RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0, mod);
+    RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0, 0.6);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
+
+    double maxDistance = 130;
+    mod = RobotContainer.m_limelight.getDistance()/maxDistance;
+    mod = MathUtil.clamp(mod, -1, 1);
+    System.out.println(mod);
+
+    double customMod = 0.5;
+
     // System.out.println(" exec");
 
-    if (timer.get() > 1.7) {//After 2 seconds
+    if (timer.get() > 1) {//After 2 seconds
       //17300 for
       //System.out.println("Execute shooter stuff");
-      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,mod);
+      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,customMod);
       RobotContainer.m_intakeSystem.setFeederSystem(1, 0.7);
       RobotContainer.m_intakeSystem.setConveyorSpeed(1, 1);
 

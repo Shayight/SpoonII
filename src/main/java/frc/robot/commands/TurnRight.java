@@ -48,7 +48,7 @@ public class TurnRight extends CommandBase {
   @Override
   public void initialize() {
     startingAngle = RobotContainer.m_driveSubsystem.getRotation();
-    RobotContainer.m_driveSubsystem.tankDrive(-1, 1, mod);
+    RobotContainer.m_driveSubsystem.tankDrive(-1, 1);
     timer.start();
   }
 
@@ -71,7 +71,7 @@ public class TurnRight extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    RobotContainer.m_driveSubsystem.tankDrive(0.0, 0.0, mod);
+    RobotContainer.m_driveSubsystem.tankDrive(0.0, 0.0);
     timer.reset();
   }
 

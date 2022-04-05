@@ -24,9 +24,9 @@ public class TestCommand {
 
     public Command Autonomous3() { //Right side autonomous
         return new SequentialCommandGroup(
-        new ParallelCommandGroup(new DriveForward(0.7, 15)),
-        new ParallelCommandGroup(new ConveyorCommand(0.5, 1), new DriveForward(0.7, 60), new IntakeCommand(1, 1.7)),
-        new ParallelCommandGroup(new ConveyorCommand(0.5, 0.5), new TurnRight(150, 0.7)),
+        new ParallelCommandGroup(new PIDDriveCommand(0.8, 15)),
+        new ParallelCommandGroup(new ConveyorCommand(0.5, 1), new PIDDriveCommand(0.6, 60), new IntakeCommand(1, 1.7)),
+        new ParallelCommandGroup(new ConveyorCommand(0.5, 0.5), new PIDTurnRight(150, 0.7)),
         new AutoshootCommand(0.68, 5),
         new TurnRight(65, 0.7)
         );

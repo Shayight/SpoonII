@@ -6,7 +6,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 
-public class PIDTurnLeft extends CommandBase {
+public class PIDTurnRight extends CommandBase {
 
     PIDController pid;
     double mod = 0.5;
@@ -16,7 +16,7 @@ public class PIDTurnLeft extends CommandBase {
     
     // private final DriveSubsystem drive_subsystem;
   
-    public PIDTurnLeft(double targetDegrees, double mod) {
+    public PIDTurnRight(double targetDegrees, double mod) {
       this.targetDegrees = targetDegrees;
       this.mod = mod;
       pid = new PIDController(P, I, D);

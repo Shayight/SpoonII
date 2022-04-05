@@ -40,7 +40,7 @@ public class AutoAimCommand extends CommandBase {
   public void initialize() {
     System.out.println("autoaim init");
     double adjust = turret_Limelight.steeringAdjust();//if there is a target, get the distance from it
-    RobotContainer.m_shooterSubsystem.setTurretSpeed(-adjust, 0.25);
+    RobotContainer.m_shooterSubsystem.setTurretSpeed(-adjust, mfd);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -50,7 +50,7 @@ public class AutoAimCommand extends CommandBase {
     System.out.println("autoaim exec ");
     adjust = turret_Limelight.steeringAdjust();
     System.out.println("stadj returned" + adjust);
-    RobotContainer.m_shooterSubsystem.setTurretSpeed(-adjust, 0.25);
+    RobotContainer.m_shooterSubsystem.setTurretSpeed(-adjust, mfd);
   }
 
 
