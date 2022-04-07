@@ -103,7 +103,7 @@ public class RobotContainer {
   public void SetupDashboard(){
     SmartDashboard.putNumber("Turret Encoder Rotation", m_shooterSubsystem.getRawTurretRotation());
     SmartDashboard.putNumber("Distance travelled (in inches)",m_driveSubsystem.getLinearDistanceEncoder());
-    SmartDashboard.putNumber("Distance from Objective", m_limelight.getDistance()*Constants.convertToMeters);
+    SmartDashboard.putNumber("Distance from Objective", m_limelight.getDistance());
     SmartDashboard.putNumber("Motor Speed", m_driveSubsystem.getCurrentMotorSpeed());
     SmartDashboard.putBoolean("Target Locked", m_limelight.canSeeTarget());
     SmartDashboard.putNumber("Rotation Rate", m_driveSubsystem.getAngularAcceleration());

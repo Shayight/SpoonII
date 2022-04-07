@@ -6,11 +6,13 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimberSubsystem extends SubsystemBase {
@@ -30,11 +32,17 @@ public class ClimberSubsystem extends SubsystemBase {
     rightMotor = new CANSparkMax(17, MotorType.kBrushless);
     leftEncoder = leftMotor.getEncoder();
     rightEncoder = rightMotor.getEncoder();
+    rightEncoder.setPosition(0);
+    leftEncoder.setPosition(0);
     climberSolenoid = ph.makeDoubleSolenoid(3,4);
+    leftMotor.setSoftLimit(SoftLimitDirection.kForward, -100.0f);
+    rightMotor.setSoftLimit(SoftLimitDirection.kForward, -100.0f);
   }
 
   public void setClimberSpeed(double speed, double mod) {
-    leftMotor.setInverted(false);
+    SmartDashboard.putNumber("Climber position - RIGHT", rightEncoder.getPosition());
+    SmartDashboard.putNumber("Climber position - LEFT", leftEncoder.getPosition());
+    leftMotor.setInverted(true);
     rightMotor.setInverted(false);
     leftMotor.set(speed*mod);
     rightMotor.set(speed*mod);

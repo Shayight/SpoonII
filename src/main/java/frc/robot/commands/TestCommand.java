@@ -35,10 +35,10 @@ public class TestCommand {
             ),
             new ParallelCommandGroup(
                 new ConveyorCommand(0.5, 0.5),
-                new PIDTurnRight(150, 0.7)
+                new PIDTurn(150, 0.7)
             ),
             new AutoshootCommand(0.68, 5),
-            new PIDTurnRight(65, 0.7)
+            new PIDTurn(65, 0.7)
         );
     }
 
@@ -53,7 +53,7 @@ public class TestCommand {
             // point towards goal
             new ParallelCommandGroup(
                 new ConveyorCommand(0.5, 0.5),
-                new PIDTurnRight(150, 0.7)
+                new PIDTurn(150, 0.7)
             ),
             // shoot
             new AutoAimCommand(0.7),
@@ -74,4 +74,15 @@ public class TestCommand {
             // new AutoshootCommand(0.68, 5),
         );
     }
-}
+
+    public Command Autonomous5() { //Center Autonomous
+        return new SequentialCommandGroup(
+            new PIDDriveCommand(15, 0.5),
+            new PIDTurn(90, 0.5),
+            new PIDRotateTurret(-45),
+            new AutoAimCommand(0.6)
+        );
+        
+    }
+
+    }
