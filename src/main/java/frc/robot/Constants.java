@@ -16,12 +16,16 @@ public final class Constants {
 
     //LIMELIGHT DISTANCE SETTINGS       
      
+
+    public static double convertToMeters = 1/39.37;
     // how many degrees back is your limelight rotated from perfectly vertical?
-    public static double limelightMountAngleDegrees = 28.0;
+    public static double limelightMountAngleDegrees = 46.0;
     // distance from the center of the Limelight lens to the floor
-    public static double limelightHeight = 32.0;
+    public static double limelightHeight = 32.0 * convertToMeters;
     // distance from the target to the floor
-    public static double goalHeightInches = 104.0;
+    public static double goalHeightInches = 104.0 * convertToMeters;
+
+    
 
     public static double driveGearRatio = 18;
     

@@ -8,111 +8,65 @@
 package frc.robot.commands;
 //this command enaables the feeder and then the shooter in order to shoot them lemons, aim first
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.RobotContainer;
 
-import com.ctre.phoenix.motorcontrol.can.*; //Talon FX
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode; //Neutral mode for the Falcons
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.*;
-
-
-
 
 public class ShootingCommand extends CommandBase {
+  private final byte shootDuration = 2;
   Timer timer;
   boolean buttonPressed;
   double mod;
   double maximum = 17300;
   double acc;
-
-  // TurretSubsystem turret_subsystem;
-  // IntakeSubsystem intake_subsystem;
-
   
-  public ShootingCommand(double modifier, double accuracy) {
-    // System.out.println("constr ");
-    // if the button is pressed the command runs, modifier is used to regulate the speed of the shooter for now
-    // turret_subsystem = subsystem;
-    // oi = subsystem2;
-    // addRequirements(subsystem);
-    // addRequirements(subsystem2);
+  public ShootingCommand() {
     timer = new Timer();
-    // turret_subsystem = new TurretSubsystem();
-    // intake_subsystem = new IntakeSubsystem();
-    // oi = new OI();
-    //mod = modifier;
-    acc = accuracy;
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize() {
-    // System.out.println("init ");
     timer.reset();
-    timer.start();//Starts the timer
-    RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0, 0.6);
+    timer.start();
+    
+    
+
+    SmartDashboard.putBoolean("Shooting", true);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
+    RobotContainer.m_shooterSubsystem.setShooterSpeed(
+      RobotContainer.m_shooterSubsystem.getRangeOfTrajectory()/6380
+    );
 
-    double maxDistance = 130;
-    mod = RobotContainer.m_limelight.getDistance()/maxDistance;
-    mod = MathUtil.clamp(mod, -1, 1);
-    System.out.println(mod);
 
-    double customMod = 0.5;
-
-    // System.out.println(" exec");
-
-    if (timer.get() > 1) {//After 2 seconds
-      //17300 for
-      //System.out.println("Execute shooter stuff");
-      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,customMod);
+    if(timer.get() > shootDuration) {
       RobotContainer.m_intakeSystem.setFeederSystem(1, 0.7);
       RobotContainer.m_intakeSystem.setConveyorSpeed(1, 1);
-
-      // System.out.println("Shooting "+timer.get());
-    } else{
-      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,mod);//Charges falcon motors until they reach certain speed
-      SmartDashboard.putNumber("Shooter Speed", RobotContainer.m_shooterSubsystem.shooterEncoder());
-      }
-      buttonPressed = RobotContainer.m_controllerSubsystem.m_operatorController.getB();
+    }
   }
-
 
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    // System.out.println(" end");
-    //Stops all motors and resets timer
-    RobotContainer.m_shooterSubsystem.setShooterSpeed(0.0,mod);
+    RobotContainer.m_shooterSubsystem.setShooterSpeed(0.0);
     RobotContainer.m_intakeSystem.setFeederSystem(0.0, 1);
     RobotContainer.m_intakeSystem.setConveyorSpeed(0, 0.0);
+
     timer.reset();
-    // System.out.println("Ended");
+    
     SmartDashboard.putBoolean("Shooting", false);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    // System.out.println(" is finished");
-    if(buttonPressed==false) {
-    //if(buttonPressed==false){//if there is no more input, stop shooting
-      // System.out.println("Disabled");
-      return true;
-    }else{
-      SmartDashboard.putBoolean("Shooting", buttonPressed);//Displays shooting status
-    return (!buttonPressed);//returns false if button is pressed
-    }
+    return !RobotContainer.m_controllerSubsystem.m_operatorController.getB();
+    // return timer.get() > shootDuration;
+    // return (timer.get() > shootDuration) || !RobotContainer.m_controllerSubsystem.m_operatorController.getB();
   }
-
 }

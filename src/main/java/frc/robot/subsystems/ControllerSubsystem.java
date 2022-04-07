@@ -6,15 +6,15 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.ConveyorCommand;
-import frc.robot.commands.DriveForward;
 import frc.robot.commands.PIDDriveCommand;
 import frc.robot.commands.PIDTurnLeft;
+import frc.robot.commands.RevUpShooter;
 import frc.robot.commands.ShootingCommand;
-import frc.robot.commands.TurnLeft;
 import frc.robot.utils.ButtonBoard;
 
 public class ControllerSubsystem extends SubsystemBase {
@@ -45,28 +45,22 @@ public class ControllerSubsystem extends SubsystemBase {
    * POV Horizontal: Solenoid Reverse/Forward
    */
 
-  public void CommandController(){
-
-
-
-      m_operatorController.A.whenActive(new AutoAimCommand(0.5));
-      m_operatorController.B.whenActive(new ShootingCommand(0.68, 7000));
-
+  public void setButtonListeners() {
+      m_operatorController.A.whenHeld(new AutoAimCommand(0.5),true);
+      m_operatorController.B.whenHeld(new ShootingCommand(), true);
+      
       m_operatorController.LB.whenHeld(new ConveyorCommand(0.8, 2), true);
-
-  
   }
 
   public void driverPeriodic(){
-    //Intake controlling
-    if(m_driverController.getL2Button()){ 
+    // Intake control
+    if(m_driverController.getL2Button()) { 
       RobotContainer.m_intakeSystem.setIntakeSystem(1, 0.7);
-    }else if(m_driverController.getR2Button()){
+    } else if(m_driverController.getR2Button()) {
       RobotContainer.m_intakeSystem.setIntakeSystem(1, -0.7);
-    }else{
+    } else {
       RobotContainer.m_intakeSystem.setIntakeSystem(0, 1);
     }
-
 
     if(m_driverController.getL1Button())
       RobotContainer.m_pnuematicSubsystem.setIntakeForward();
@@ -74,10 +68,7 @@ public class ControllerSubsystem extends SubsystemBase {
       RobotContainer.m_pnuematicSubsystem.setIntakeReverse();
   }
 
-  public void operatorPeriodic(){
-
-
-    
+  public void operatorPeriodic(){    
     if(m_operatorController.getPOVHorizontal() == 1)
       RobotContainer.m_climberSubsystem.setClimberSolenoidForward();
     else if(m_operatorController.getPOVHorizontal() == -1)
@@ -85,11 +76,11 @@ public class ControllerSubsystem extends SubsystemBase {
       
 
     if(m_operatorController.getPOVVertical() == 1)
-    RobotContainer.m_climberSubsystem.setClimberSpeed(-1, 0.6);
+      RobotContainer.m_climberSubsystem.setClimberSpeed(-1, 0.6);
     else if(m_operatorController.getPOVVertical() == -1)
-    RobotContainer.m_climberSubsystem.setClimberSpeed(1, 0.6);
+      RobotContainer.m_climberSubsystem.setClimberSpeed(1, 0.6);
     else
-    RobotContainer.m_climberSubsystem.setClimberSpeed(0, 1);
+      RobotContainer.m_climberSubsystem.setClimberSpeed(0, 1);
 
     RobotContainer.m_intakeSystem.setConveyorSpeed(-m_operatorController.getYAxis(), .45);
     RobotContainer.m_intakeSystem.setFeederSystem(-m_operatorController.getYAxis(), .6);
@@ -105,14 +96,13 @@ public class ControllerSubsystem extends SubsystemBase {
       RobotContainer.m_driveSubsystem.pigeonReset();
     }
 
-
     if(m_operatorController.getLT()){
-      RobotContainer.m_shooterSubsystem.setShooterSpeed(-1, 0.7); //Enables shooting the balls out, which the force can be adjusted using the modifier.
+      // RobotContainer.m_shooterSubsystem.setShooterSpeed(-1, 0.7); //Enables shooting the balls out, which the force can be adjusted using the modifier.
       RobotContainer.m_intakeSystem.setFeederSystem(-1, 0.7);  
       RobotContainer.m_intakeSystem.setConveyorSpeed(-1, 0.5);
     }
     else{
-      RobotContainer.m_shooterSubsystem.setShooterSpeed(0, 0); //turns shooters off.
+      // RobotContainer.m_shooterSubsystem.setShooterSpeed(0, 0); //turns shooters off.
       /**
       RobotContainer.m_intakeSystem.setFeederSystem(0, 0); 
       RobotContainer.m_intakeSystem.setConveyorSpeed(0, 0);  */
@@ -124,9 +114,6 @@ public class ControllerSubsystem extends SubsystemBase {
   public void testingInit(){
 
     m_operatorController.X.whenActive(new PIDTurnLeft(90, 0.9));
-    //m_operatorController.Y.whenActive(new PIDDriveCommand(48, 0.9));
-    
-    //m_operatorController.Y.whenActive(new DriveForward(0.9, 50));
     m_operatorController.Y.whenActive(new PIDDriveCommand(50, 0.9));
   }
 

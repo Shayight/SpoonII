@@ -7,13 +7,13 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.DriveBackwards;
-import frc.robot.commands.DriveForward;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootingCommand;
 import frc.robot.commands.TestCommand;
@@ -113,9 +113,13 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_robotContainer.shooter(); //activates shooter
+    m_robotContainer.controllerPeriodic(); //activates shooter
     m_robotContainer.driveRobot(); //drives robot
     //m_robotContainer.watchIntakeControls();
+  //   if(RobotContainer.m_controllerSubsystem.m_operatorController.getB())
+  //     RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,1.0);
+  //   else
+  //     RobotContainer.m_shooterSubsystem.setShooterSpeed(0, 0);
 
   }
 

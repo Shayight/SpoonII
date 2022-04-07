@@ -17,7 +17,6 @@ import frc.robot.commands.ConveyorCommand;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.ShootingCommand;
 import frc.robot.commands.TestCommand;
-import frc.robot.commands.TurnLeft;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ControllerSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -59,6 +58,7 @@ public class RobotContainer {
     m_chooser.setDefaultOption("Right",m_tc.Autonomous3());
     m_chooser.addOption("Left",m_tc.Autonomous1());
     m_chooser.addOption("Middle",m_tc.Autonomous2());
+    m_chooser.addOption("Right4",m_tc.Autonomous4());
     //executes the SmartDashboard commands.
     SetupDashboard();
 
@@ -80,11 +80,11 @@ public class RobotContainer {
   public void ShooterInit(){
 
     //operator_shareButton.whenActive(new IntakeCommand(0.8, 1));
-    m_controllerSubsystem.CommandController();
+    m_controllerSubsystem.setButtonListeners();
   }
 
 
-  public void shooter() {
+  public void controllerPeriodic() {
     m_controllerSubsystem.operatorPeriodic();
     m_controllerSubsystem.driverPeriodic();
   }
@@ -103,11 +103,12 @@ public class RobotContainer {
   public void SetupDashboard(){
     SmartDashboard.putNumber("Turret Encoder Rotation", m_shooterSubsystem.getRawTurretRotation());
     SmartDashboard.putNumber("Distance travelled (in inches)",m_driveSubsystem.getLinearDistanceEncoder());
-    SmartDashboard.putNumber("Distance from Objective", m_limelight.getDistance());
+    SmartDashboard.putNumber("Distance from Objective", m_limelight.getDistance()*Constants.convertToMeters);
     SmartDashboard.putNumber("Motor Speed", m_driveSubsystem.getCurrentMotorSpeed());
     SmartDashboard.putBoolean("Target Locked", m_limelight.canSeeTarget());
     SmartDashboard.putNumber("Rotation Rate", m_driveSubsystem.getAngularAcceleration());
-
+    SmartDashboard.putNumber("Shooter Speed", m_shooterSubsystem.getShooterSpeed());
+    SmartDashboard.putNumber("Target Speed", m_shooterSubsystem.getRangeOfTrajectory());
 
     SmartDashboard.putData(m_chooser);
   }

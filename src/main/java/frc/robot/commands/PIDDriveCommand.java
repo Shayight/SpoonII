@@ -6,8 +6,19 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
 public class PIDDriveCommand extends CommandBase {
-    double P = 0.5, I = 0.03, D = 0.03;
-    double kP = .1, kI = .2, kD = .005;
+    /*  DON'T TOUCH THESE VALUES WITHOUT MAKING A COPY OF IT
+
+        ON SCHOOL CARPET:
+        double P = 0.25, I = 0.03, D = 0.03;
+        double kP = 0.1, kI = 0.2, kD = 0.005;
+
+        ON COMPETITION FIELD:
+
+        
+    */
+    
+    double P = 0.25, I = 0.03, D = 0.03;
+    double kP = 0.1, kI = 0.2, kD = 0.005;
 
     PIDController pid;
     PIDController centerPID;
@@ -41,8 +52,8 @@ public class PIDDriveCommand extends CommandBase {
 
         RobotContainer.m_driveSubsystem.arcadeDrive(
             // 0.8 on School Carpet
-            MathUtil.clamp(speed, -0.9, 0.9),
-            MathUtil.clamp(steering, -0.55, 0.55)            
+            MathUtil.clamp(speed, -0.8, 0.8),
+            MathUtil.clamp(steering, -0.2, 0.2)            
         );
     }
   

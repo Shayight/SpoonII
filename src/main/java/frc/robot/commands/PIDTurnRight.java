@@ -12,7 +12,7 @@ public class PIDTurnRight extends CommandBase {
     double mod = 0.5;
     double targetDegrees;
     //Almost perfect: 0.4, 0.09, 0.075
-    double P=0.4, I=0.03, D =0.235;
+    double P=0.3, I=0.04, D=0.0235;
     
     // private final DriveSubsystem drive_subsystem;
   

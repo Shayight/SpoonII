@@ -10,62 +10,50 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class ShooterSubsystem extends SubsystemBase {
-    
+    double rpmConversionFactor;
+
     WPI_TalonFX m_rightShooter;
     CANSparkMax m_turret;
     RelativeEncoder m_turretEncoder;
     
   //The intention of the Shooter Subsystem class is to initialize the shooter components, including the turret, shooter, and other devices.
     public ShooterSubsystem() {
-        //This initializes the TalonFX on the CAN ID device 6, which is the right shooter.
+        rpmConversionFactor = 600/2048;
+
+        // This initializes the TalonFX on the CAN ID device 6, which is the right shooter.
         m_rightShooter = new WPI_TalonFX(6);
-        //This initializes the motor that's on the turret, which in this case is a NEO 550. You MUST designate this as a brushless motor,
-        //as it could potentially damage the motor or motor controller if handled incorrectly.
+        m_rightShooter.setNeutralMode(NeutralMode.Coast);
+
+        //The shooter should NOT be able to spin when the motor is not active in code, so we set them to brake, locking them in place.
+        //m_rightShooter.setNeutralMode(NeutralMode.Brake); 
+
+        // This initializes the motor that's on the turret, which in this case is a NEO 550.
+        // You MUST designate this as a brushless motor,
+        //   as it could potentially damage the motor or motor controller if handled incorrectly.
         m_turret = new CANSparkMax(25, MotorType.kBrushless);
-        //This gets the SparkMAX's (Turret Motor Controller) built-in encoder, which records data from the turret's motor, such as speed, rotation, etc.
-        m_turretEncoder = m_turret.getEncoder();
-
-        m_turretEncoder.setPosition(0);
-
         m_turret.enableSoftLimit(SoftLimitDirection.kForward, true);
         m_turret.setSoftLimit(SoftLimitDirection.kForward, 1073);
 
         m_turret.enableSoftLimit(SoftLimitDirection.kReverse, true);
         m_turret.setSoftLimit(SoftLimitDirection.kReverse, -1073);
 
-        //The shooter should NOT be able to spin when the motor is not active in code, so we set them to brake, locking them in place.
-        m_rightShooter.setNeutralMode(NeutralMode.Brake); 
+        // This gets the SparkMAX's (Turret Motor Controller) built-in encoder, which records data from the turret's motor, such as speed, rotation, etc.
+        m_turretEncoder = m_turret.getEncoder();
+        m_turretEncoder.setPosition(0);
     }
 
-    @Override
-    public void periodic() {
-    // This method will be called once per scheduler run
-    }
-
-    @Override
-    public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
-    }
-
-    public void setShooterSpeed(double speed,double modifier) {
-
-        if (speed == 0.0){
-          //If there is no speed/direction input, then there is no reason to power the motor. PercentOutput refers to a value between -1 and 1,
-          //where -1 represents -100% throttle, or reverse, 0 for 0% throttle, or not touched, or 1 for 100%, which represents full speed.
-            m_rightShooter.set(TalonFXControlMode.PercentOutput,0.0); 
-          }
-          else{
-            //We flip the motors because on the physical shooter, we have the motors flipped, and in order to actually drive them in the same direction, we must flip it.
-            //The modifier refers to how much the speed value should be scaled by. This can be a value between 0 and 1, any higher and the motor won't recognize it.
-            m_rightShooter.set(TalonFXControlMode.PercentOutput, speed*modifier); //sets shooter speed 
-          }
+    public void setShooterSpeed(double speed) {
+      // (speed*2048)/600
+      m_rightShooter.set(TalonFXControlMode.PercentOutput, speed);
     }
 
     public void setTurretSpeed(double speed, double modifier) {
       //rotates turret based on speed/direction, a value between -1 and 1, and the modifier, which can be a value between 0 and 1
-      //if(getTurretRotation() >= -90 && getTurretRotation() <= 90)
+      //if(getTurr  etRotation() >= -90 && getTurretRotation() <= 90)
       if(speed > -0.10 && speed < 0.10)
         m_turret.set(0);
       else
@@ -76,15 +64,38 @@ public class ShooterSubsystem extends SubsystemBase {
         m_turret.set(-.25);*/
     }
 
-    public double shooterEncoder(){
-      // System.out.println("shooter encoder"+  m_shooterRight.getSelectedSensorVelocity());
-    
-      //This gets the speed of the shooter, recorded in raw sensor units for every 100ms.
-      SmartDashboard.setDefaultNumber("Shooter Speed", m_rightShooter.getSelectedSensorVelocity());
-      return m_rightShooter.getSelectedSensorVelocity();
+    public double getShooterSpeed(){
+      // Speed of shooter, recorded in raw sensor units for every 100ms, converted to RPM
+      double speed = m_rightShooter.getSelectedSensorVelocity();// * this.rpmConversionFactor;
+      
+      SmartDashboard.putNumber("Shooter Speed", speed);
+      //return speed;
+      return speed*600/2048;
     }
 
-    
+    public double getRangeOfTrajectory(){
+      double g = 9.81; // Gravity is -9.81 m/s 
+      double shootingAngle = 30; // Mounted angle of shooter
+      double r = 1.5 * Constants.convertToMeters; // Radius of wheel
+
+      double shootingRadians = Math.sin(Math.toRadians(2 * shootingAngle));
+      //double c = Math.sin(shootingRadians)/g;
+      double R = (RobotContainer.m_limelight.getDistance());
+      double v = Math.sqrt((R*g)/shootingRadians);
+      //double v = Math.sqrt(R/c);
+      //double oRPM = ((60 * (v / r)) / (2 * Math.PI));
+      double oRPM = ((60 * (v / r)) /Math.PI);
+      // double oRPM = (60*(v/r))/(2*Math.PI);
+
+      System.out.println(String.format("R: %f; v: %f; oRPM: %f", R, v, oRPM));
+      SmartDashboard.putNumber("Distance From Objective", R);
+      SmartDashboard.putNumber("Decimal RPM",(oRPM/6300));
+
+      //SmartDashboard.putNumber("Target Speed", nativeRPM);
+
+      return oRPM;
+    }
+
     public double getTurretRotation(){
       /** 
        * So we need to convert the turretEncoder's positions into degrees. To do this, we first need to know how many units are in a full rotation.

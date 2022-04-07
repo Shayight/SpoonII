@@ -11,9 +11,16 @@ public class PIDTurnLeft extends CommandBase {
     PIDController pid;
     double mod = 0.5;
     double targetDegrees;
-    //Almost perfect: 0.4, 0.09, 0.075
-    double P=0.4, I=0.03, D =0.235;
     
+    /* DON'T TOUCH THESE VALUES WITHOUT MAKING A COPY OF IT
+
+      ON SCHOOL CARPET:
+      double P=0.3, I=0.04, D=0.0235;
+
+      ON COMPETITION FLOOR:
+    */
+    double P=0.3, I=0.04, D=0.0235;
+
     // private final DriveSubsystem drive_subsystem;
   
     public PIDTurnLeft(double targetDegrees, double mod) {
@@ -34,7 +41,7 @@ public class PIDTurnLeft extends CommandBase {
     @Override
     public void execute() {
         double speed = pid.calculate(Math.abs(RobotContainer.m_driveSubsystem.getRotation()), targetDegrees);
-        RobotContainer.m_driveSubsystem.tankDrive(speed, -speed);
+        RobotContainer.m_driveSubsystem.tankDrive(-speed, speed);
     }
   
     // Called once the command ends or is interrupted.

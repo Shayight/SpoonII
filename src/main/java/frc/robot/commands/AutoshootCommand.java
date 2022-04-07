@@ -10,7 +10,6 @@ public class AutoshootCommand extends CommandBase{
     Timer timer;
     double mod;
     double adjust;
-    double maximum = 17300;
     double currentTime;
     double runTime;
     Limelight limelight;
@@ -40,7 +39,7 @@ public class AutoshootCommand extends CommandBase{
     // Called just before this Command runs the first time
     @Override
     public void initialize() {
-      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0, mod);
+      RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0);
       double adjust = limelight.steeringAdjust();//if there is a target, get the distance from it
       RobotContainer.m_shooterSubsystem.setTurretSpeed(-adjust, 0.25);
       timer.start();
@@ -49,6 +48,7 @@ public class AutoshootCommand extends CommandBase{
     // Called repeatedly when this Command is scheduled to run
     @Override
     public void execute() {
+      /** 
       currentTime = timer.get();
       double adjust = limelight.steeringAdjust();//if there is a target, get the distance from it
       RobotContainer.m_shooterSubsystem.setTurretSpeed(-adjust, 0.5);
@@ -56,15 +56,15 @@ public class AutoshootCommand extends CommandBase{
       if (currentTime >= 2) {//Once at that speed, fire/load balls
           //17300 for
           //System.out.println("Execute shooter stuff");
-          RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0, mod);
+          RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0);
           RobotContainer.m_intakeSystem.setFeederSystem(1, 1);
           RobotContainer.m_intakeSystem.setConveyorSpeed(1, .77);
 
       }
         else{
-          RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,mod);//Charges falcon motors until they reach certain speed
+          RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0);//Charges falcon motors until they reach certain speed
         }
-  
+      */
         
     }
   
@@ -74,7 +74,7 @@ public class AutoshootCommand extends CommandBase{
     public void end(boolean interrupted) {
       // System.out.println(" end");
       //Stops all motors and resets timer
-      RobotContainer.m_shooterSubsystem.setShooterSpeed(0.0, mod);
+      RobotContainer.m_shooterSubsystem.setShooterSpeed(0.0);
       RobotContainer.m_intakeSystem.setFeederSystem(0.0,0.0);
       RobotContainer.m_shooterSubsystem.setTurretSpeed(0, mod);
       RobotContainer.m_intakeSystem.setConveyorSpeed(1, 0);
