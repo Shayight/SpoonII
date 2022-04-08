@@ -45,7 +45,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
 
     leftMotor.setSoftLimit(SoftLimitDirection.kReverse, -175.0f);
-    rightMotor.setSoftLimit(SoftLimitDirection.kReverse, -155.0f);
+    rightMotor.setSoftLimit(SoftLimitDirection.kReverse, -175.0f);
   }
 
   public void setClimberSpeed(double speed, double mod) {

@@ -6,8 +6,10 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.ConveyorCommand;
@@ -47,15 +49,20 @@ public class ControllerSubsystem extends SubsystemBase {
 
   public void setButtonListeners() {
       m_operatorController.A.whenHeld(new AutoAimCommand(0.5),true);
-      m_operatorController.B.whenHeld(new ShootingCommand(10), true);
+      m_operatorController.B.whenHeld(new ShootingCommand(10,0), true);
       
       m_operatorController.LB.whenHeld(new ConveyorCommand(0.8, 2), true);
+      m_operatorController.X.whenPressed(new InstantCommand(() -> RobotContainer.m_shooterSubsystem.modifyTurretSpeed(100)));
+      m_operatorController.Y.whenPressed(new InstantCommand(() -> RobotContainer.m_shooterSubsystem.modifyTurretSpeed(-100)));
+
   }
 
   public void driverPeriodic(){
     // Intake control
     if(m_driverController.getL2Button()) { 
       RobotContainer.m_intakeSystem.setIntakeSystem(1, 0.7);
+      RobotContainer.m_pnuematicSubsystem.setIntakeReverse();
+
     } else if(m_driverController.getR2Button()) {
       RobotContainer.m_intakeSystem.setIntakeSystem(1, -0.7);
     } else {
