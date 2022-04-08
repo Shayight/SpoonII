@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class TestCommand {
     public Command Autonomous1() { //Left side autonomous
@@ -118,7 +119,9 @@ public class TestCommand {
 
     public Command Autonomous7(){
         return new SequentialCommandGroup(
-          new PIDTurnLeft(180, 1)  
+          new PIDTurnLeft(180, 1), 
+          new WaitCommand(2),
+          new PIDTurnRight(180, 1)
         );
     }
 

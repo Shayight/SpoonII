@@ -27,7 +27,7 @@ public class PIDTurnLeft extends CommandBase {
       this.targetDegrees = targetDegrees;
       this.mod = mod;
       pid = new PIDController(P, I, D);
-      pid.setTolerance(2.5);
+      pid.setTolerance(1);
     }
   
     // Called when the command is initially scheduled.

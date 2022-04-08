@@ -55,6 +55,8 @@ public class ControllerSubsystem extends SubsystemBase {
       m_operatorController.X.whenPressed(new InstantCommand(() -> RobotContainer.m_shooterSubsystem.modifyTurretSpeed(100)));
       m_operatorController.Y.whenPressed(new InstantCommand(() -> RobotContainer.m_shooterSubsystem.modifyTurretSpeed(-100)));
 
+      m_operatorController.RB.whenHeld(new ShootingCommand(10, 2500),true);
+
   }
 
   public void driverPeriodic(){
