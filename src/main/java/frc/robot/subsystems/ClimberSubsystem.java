@@ -35,8 +35,17 @@ public class ClimberSubsystem extends SubsystemBase {
     rightEncoder.setPosition(0);
     leftEncoder.setPosition(0);
     climberSolenoid = ph.makeDoubleSolenoid(3,4);
-    leftMotor.setSoftLimit(SoftLimitDirection.kForward, -100.0f);
-    rightMotor.setSoftLimit(SoftLimitDirection.kForward, -100.0f);
+
+    leftMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    rightMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    leftMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    rightMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
+
+
+
+    leftMotor.setSoftLimit(SoftLimitDirection.kReverse, -175.0f);
+    rightMotor.setSoftLimit(SoftLimitDirection.kReverse, -155.0f);
   }
 
   public void setClimberSpeed(double speed, double mod) {
@@ -46,6 +55,11 @@ public class ClimberSubsystem extends SubsystemBase {
     rightMotor.setInverted(false);
     leftMotor.set(speed*mod);
     rightMotor.set(speed*mod);
+  }
+
+  public void resetClimber(){
+    leftMotor.setSoftLimit(SoftLimitDirection.kForward, 0.0f);
+    rightMotor.setSoftLimit(SoftLimitDirection.kForward, 0.0f);
   }
 
   public void setClimberSolenoidForward(){

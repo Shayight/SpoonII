@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -19,7 +20,9 @@ public class ShooterSubsystem extends SubsystemBase {
     WPI_TalonFX m_rightShooter;
     CANSparkMax m_turret;
     RelativeEncoder m_turretEncoder;
-    
+
+    double kF = 1023.0/20660.0, kP = 0.1, kI = 0.001, kD = 5.0;
+    double targetThreshold = 50.0;
   //The intention of the Shooter Subsystem class is to initialize the shooter components, including the turret, shooter, and other devices.
     public ShooterSubsystem() {
         rpmConversionFactor = 600/2048;
@@ -27,6 +30,20 @@ public class ShooterSubsystem extends SubsystemBase {
         // This initializes the TalonFX on the CAN ID device 6, which is the right shooter.
         m_rightShooter = new WPI_TalonFX(6);
         m_rightShooter.setNeutralMode(NeutralMode.Coast);
+        // closed loop stuff
+
+        m_rightShooter.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 20);
+
+        m_rightShooter.configNominalOutputForward(0);
+        m_rightShooter.configNominalOutputReverse(0);
+        m_rightShooter.configPeakOutputForward(1);
+        m_rightShooter.configPeakOutputReverse(-1);
+
+        m_rightShooter.config_kF(0, kF);
+        m_rightShooter.config_kP(0, kP);
+        m_rightShooter.config_kI(0, kI);
+        m_rightShooter.config_kD(0, kD);
+        /// ----
 
         //The shooter should NOT be able to spin when the motor is not active in code, so we set them to brake, locking them in place.
         //m_rightShooter.setNeutralMode(NeutralMode.Brake); 
@@ -46,9 +63,18 @@ public class ShooterSubsystem extends SubsystemBase {
         m_turretEncoder.setPosition(0);
     }
 
-    public void setShooterSpeed(double speed) {
+    public void setShooterSpeed(double RPM) {
       // (speed*2048)/600
-      m_rightShooter.set(TalonFXControlMode.PercentOutput, speed);
+      // m_rightShooter.set(TalonFXControlMode.PercentOutput, speed);
+      m_rightShooter.set(TalonFXControlMode.Velocity, (RPM*2048)/600);
+    }
+
+
+
+    public boolean isAtTarget(double target) {
+      var actual = getShooterSpeed();
+      return actual <= target + targetThreshold
+            && actual >= target - targetThreshold;
     }
 
     public void setTurretSpeed(double speed, double modifier) {
@@ -66,11 +92,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public double getShooterSpeed(){
       // Speed of shooter, recorded in raw sensor units for every 100ms, converted to RPM
-      double speed = m_rightShooter.getSelectedSensorVelocity();// * this.rpmConversionFactor;
+      double speed = (m_rightShooter.getSelectedSensorVelocity()*600)/2048;// * this.rpmConversionFactor;
       
-      SmartDashboard.putNumber("Shooter Speed", speed);
+      // SmartDashboard.putNumber("Shooter Speed", speed);
       //return speed;
-      return speed*600/2048;
+      return speed;
     }
 
     public double getRangeOfTrajectory(){

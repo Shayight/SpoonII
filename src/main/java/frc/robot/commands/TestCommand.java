@@ -82,7 +82,29 @@ public class TestCommand {
             new PIDRotateTurret(-45),
             new AutoAimCommand(0.6)
         );
-        
+    }
+    public Command Autonomous6() { //Left autononmous, 4 ball
+        return new SequentialCommandGroup(
+            new ParallelCommandGroup( //Phase 1, pick up ball in front. (2 balls in feeder) (4 seconds)
+                new PIDDriveCommand(65, 0.8), 
+                new IntakeCommand(1, 3)
+            ),
+            new PIDTurn(180, 0.6), //Phase 2, shoot balls close to target. (2 seconds)
+            new ParallelCommandGroup( 
+                new AutoAimCommand(0.6),
+                new ShootingCommand(3)    
+            ),
+            new PIDTurn(-158, 0.6), //Phase 3, turn and pick up the ball by the driverstation. Additionally, wait a few seconds until the player feeds the ball. (2 balls in feeder) (5 seconds)
+            new PIDDriveCommand(70, 0.8),  
+            new IntakeCommand(1, 3),
+
+            new PIDDriveCommand(-30, 0.8), //Phase 4, drive backwards, turn around, and SEND IT. (4 seconds)
+            new PIDTurn(180, 0.6),
+            new ParallelCommandGroup(
+                new AutoAimCommand(0.6),
+                new ShootingCommand(3)
+            ) //END OF AUTONOMOUS.
+        );
     }
 
     }

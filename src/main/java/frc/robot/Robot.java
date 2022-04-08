@@ -37,6 +37,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    SmartDashboard.putNumber("testShooterSpeed", 0.0);
     CameraServer.startAutomaticCapture();
     m_robotContainer = new RobotContainer(); 
     m_robotContainer.m_driveSubsystem.getLinearDistanceEncoder();
@@ -108,6 +109,7 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
     m_robotContainer.ShooterInit();
     m_robotContainer.testing();
+    m_robotContainer.m_climberSubsystem.resetClimber();
   }
 
   /** This function is called periodically during operator control. */

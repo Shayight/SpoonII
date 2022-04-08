@@ -85,7 +85,7 @@ public class RobotContainer {
 
 
   public void controllerPeriodic() {
-    m_controllerSubsystem.operatorPeriodic();
+    // m_controllerSubsystem.operatorPeriodic();
     m_controllerSubsystem.driverPeriodic();
   }
 
@@ -109,6 +109,7 @@ public class RobotContainer {
     SmartDashboard.putNumber("Rotation Rate", m_driveSubsystem.getAngularAcceleration());
     SmartDashboard.putNumber("Shooter Speed", m_shooterSubsystem.getShooterSpeed());
     SmartDashboard.putNumber("Target Speed", m_shooterSubsystem.getRangeOfTrajectory());
+
 
     SmartDashboard.putData(m_chooser);
   }

@@ -16,13 +16,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ShootingCommand extends CommandBase {
   private final byte shootDuration = 2;
   Timer timer;
+  double endTime;
   boolean buttonPressed;
   double mod;
   double maximum = 17300;
   double acc;
+  double tspeed;
   
-  public ShootingCommand() {
+  public ShootingCommand(double time) {
     timer = new Timer();
+    endTime = time;
   }
 
   // Called just before this Command runs the first time
@@ -31,22 +34,19 @@ public class ShootingCommand extends CommandBase {
     timer.reset();
     timer.start();
     
-    
-
     SmartDashboard.putBoolean("Shooting", true);
+    tspeed = SmartDashboard.getNumber("testShooterSpeed", 0.0);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    RobotContainer.m_shooterSubsystem.setShooterSpeed(
-      RobotContainer.m_shooterSubsystem.getRangeOfTrajectory()/6380
-    );
+    RobotContainer.m_shooterSubsystem.setShooterSpeed(tspeed);
 
 
-    if(timer.get() > shootDuration) {
+    if(RobotContainer.m_shooterSubsystem.isAtTarget(tspeed)) {
       RobotContainer.m_intakeSystem.setFeederSystem(1, 0.7);
-      RobotContainer.m_intakeSystem.setConveyorSpeed(1, 1);
+      RobotContainer.m_intakeSystem.setConveyorSpeed(1, 0.7);
     }
   }
 
