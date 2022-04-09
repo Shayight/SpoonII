@@ -12,7 +12,7 @@ public class PIDTurnRight extends CommandBase {
     double mod = 0.5;
     double targetDegrees;
     //Almost perfect: 0.4, 0.09, 0.075
-    double P=0.3, I=0.04, D=0.0235;
+    double P=0.1, I=0.04, D=0.0235;
     
     // private final DriveSubsystem drive_subsystem;
   
@@ -20,7 +20,7 @@ public class PIDTurnRight extends CommandBase {
       this.targetDegrees = targetDegrees;
       this.mod = mod;
       pid = new PIDController(P, I, D);
-      pid.setTolerance(2.5);
+      pid.setTolerance(1);
     }
   
     // Called when the command is initially scheduled.

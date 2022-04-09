@@ -101,7 +101,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
    */
   public void tankDrive(double speedLeft, double speedRight){
       m_drive.tankDrive(speedLeft, speedRight);
-      SmartDashboard.putNumber("Current Angle of Robot",getRotation());
   }
 
   public void arcadeDrive(double speed, double steering){

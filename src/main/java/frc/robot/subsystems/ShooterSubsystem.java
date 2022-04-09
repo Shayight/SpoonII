@@ -20,11 +20,13 @@ public class ShooterSubsystem extends SubsystemBase {
     WPI_TalonFX m_rightShooter;
     CANSparkMax m_turret;
     RelativeEncoder m_turretEncoder;
+    double speedValue;
 
     double kF = 1023.0/20660.0, kP = 0.1, kI = 0.001, kD = 5.0;
     double targetThreshold = 50.0;
   //The intention of the Shooter Subsystem class is to initialize the shooter components, including the turret, shooter, and other devices.
     public ShooterSubsystem() {
+        speedValue = 4000;
         rpmConversionFactor = 600/2048;
 
         // This initializes the TalonFX on the CAN ID device 6, which is the right shooter.
@@ -53,15 +55,17 @@ public class ShooterSubsystem extends SubsystemBase {
         //   as it could potentially damage the motor or motor controller if handled incorrectly.
         m_turret = new CANSparkMax(25, MotorType.kBrushless);
         m_turret.enableSoftLimit(SoftLimitDirection.kForward, true);
-        m_turret.setSoftLimit(SoftLimitDirection.kForward, 1073);
+        m_turret.setSoftLimit(SoftLimitDirection.kForward, 700);
 
         m_turret.enableSoftLimit(SoftLimitDirection.kReverse, true);
-        m_turret.setSoftLimit(SoftLimitDirection.kReverse, -1073);
+        m_turret.setSoftLimit(SoftLimitDirection.kReverse, -700);
 
         // This gets the SparkMAX's (Turret Motor Controller) built-in encoder, which records data from the turret's motor, such as speed, rotation, etc.
         m_turretEncoder = m_turret.getEncoder();
         m_turretEncoder.setPosition(0);
-    }
+
+      
+      }
 
     public void setShooterSpeed(double RPM) {
       // (speed*2048)/600
@@ -139,5 +143,15 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public double getRawTurretRotation(){
       return m_turretEncoder.getPosition();
+    }
+
+    public void modifyTurretSpeed(double amount){
+        speedValue = speedValue + amount;
+        SmartDashboard.putNumber("Actual Target Speed", getShooterTestSpeed());
+    }
+
+
+    public double getShooterTestSpeed(){
+      return speedValue;
     }
 }

@@ -8,8 +8,9 @@
 package frc.robot.commands;
 //this command enaables the feeder and then the shooter in order to shoot them lemons, aim first
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
-
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,13 +20,15 @@ public class ShootingCommand extends CommandBase {
   double endTime;
   boolean buttonPressed;
   double mod;
+  double autoMod;
   double maximum = 17300;
   double acc;
   double tspeed;
   
-  public ShootingCommand(double time) {
+  public ShootingCommand(double time, double RPM) {
     timer = new Timer();
     endTime = time;
+    autoMod = RPM;
   }
 
   // Called just before this Command runs the first time
@@ -35,19 +38,21 @@ public class ShootingCommand extends CommandBase {
     timer.start();
     
     SmartDashboard.putBoolean("Shooting", true);
-    tspeed = SmartDashboard.getNumber("testShooterSpeed", 0.0);
+    tspeed = RobotContainer.m_shooterSubsystem.getShooterTestSpeed();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    RobotContainer.m_shooterSubsystem.setShooterSpeed(tspeed);
-
+    if(!RobotState.isAutonomous()){
+      RobotContainer.m_shooterSubsystem.setShooterSpeed(tspeed);
+    }
 
     if(RobotContainer.m_shooterSubsystem.isAtTarget(tspeed)) {
       RobotContainer.m_intakeSystem.setFeederSystem(1, 0.7);
       RobotContainer.m_intakeSystem.setConveyorSpeed(1, 0.7);
     }
+
   }
 
   // Called once after isFinished returns true

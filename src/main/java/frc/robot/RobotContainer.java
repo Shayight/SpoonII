@@ -35,13 +35,14 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public static ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  public static ControllerSubsystem m_controllerSubsystem = new ControllerSubsystem();
   public static DrivetrainSubsystem m_driveSubsystem = new DrivetrainSubsystem();
   public static IntakeSubsystem m_intakeSystem = new IntakeSubsystem();
   public static ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   public static Limelight m_limelight = new Limelight("limelight");
   public static PnuematicSubsystem m_pnuematicSubsystem = new PnuematicSubsystem();
   public static ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
-  public static ControllerSubsystem m_controllerSubsystem = new ControllerSubsystem();
+
 
   public static AutonomousCommand m_autoCommand = new AutonomousCommand();
   private TestCommand m_tc = new TestCommand();
@@ -60,6 +61,7 @@ public class RobotContainer {
     m_chooser.addOption("Middle",m_tc.Autonomous2());
     m_chooser.addOption("Right4",m_tc.Autonomous4());
     m_chooser.addOption("Right 4 Ball (pre-testing)", m_tc.Autonomous6());
+    m_chooser.addOption("Turn Right Auto", m_tc.Autonomous7());
     //executes the SmartDashboard commands.
     SetupDashboard();
 
@@ -86,7 +88,7 @@ public class RobotContainer {
 
 
   public void controllerPeriodic() {
-    // m_controllerSubsystem.operatorPeriodic();
+    m_controllerSubsystem.operatorPeriodic();
     m_controllerSubsystem.driverPeriodic();
   }
 
@@ -110,8 +112,11 @@ public class RobotContainer {
     SmartDashboard.putNumber("Rotation Rate", m_driveSubsystem.getAngularAcceleration());
     SmartDashboard.putNumber("Shooter Speed", m_shooterSubsystem.getShooterSpeed());
     SmartDashboard.putNumber("Target Speed", m_shooterSubsystem.getRangeOfTrajectory());
+    SmartDashboard.putNumber("Current Angle of Robot",m_driveSubsystem.getRotation());
+    //SmartDashboard.putNumber("testShooterSpeed", speedValue);
 
 
     SmartDashboard.putData(m_chooser);
   }
+
 }

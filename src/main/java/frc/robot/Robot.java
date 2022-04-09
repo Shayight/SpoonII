@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     m_robotContainer.ShooterInit();
-    m_robotContainer.testing();
+    //m_robotContainer.testing();
     m_robotContainer.m_climberSubsystem.resetClimber();
   }
 
@@ -117,6 +117,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     m_robotContainer.controllerPeriodic(); //activates shooter
     m_robotContainer.driveRobot(); //drives robot
+    //m_robotContainer.m_shooterSubsystem.modifyTurretSpeed();
     //m_robotContainer.watchIntakeControls();
   //   if(RobotContainer.m_controllerSubsystem.m_operatorController.getB())
   //     RobotContainer.m_shooterSubsystem.setShooterSpeed(1.0,1.0);
