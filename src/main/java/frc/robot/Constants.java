@@ -21,7 +21,7 @@ public final class Constants {
     // how many degrees back is your limelight rotated from perfectly vertical?
     public static double limelightMountAngleDegrees = 46.0;
     // distance from the center of the Limelight lens to the floor
-    public static double limelightHeight = 32.0 * convertToMeters;
+    public static double limelightHeight = 25.0 * convertToMeters;
     // distance from the target to the floor
     public static double goalHeightInches = 104.0 * convertToMeters;
 
@@ -29,7 +29,7 @@ public final class Constants {
 
     public static double driveGearRatio = 18;
     
-    public static double MetersPerPulse = (6 * Math.PI) / ((double) 2048 * driveGearRatio);
+    public static double MetersPerPulse = (5.9 * Math.PI) / ((double) 2048 * driveGearRatio);
 
     /**
      * 0 = left

@@ -60,6 +60,8 @@ public class ShooterSubsystem extends SubsystemBase {
         m_turret.enableSoftLimit(SoftLimitDirection.kReverse, true);
         m_turret.setSoftLimit(SoftLimitDirection.kReverse, -700);
 
+
+
         // This gets the SparkMAX's (Turret Motor Controller) built-in encoder, which records data from the turret's motor, such as speed, rotation, etc.
         m_turretEncoder = m_turret.getEncoder();
         m_turretEncoder.setPosition(0);
@@ -105,7 +107,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public double getRangeOfTrajectory(){
       double g = 9.81; // Gravity is -9.81 m/s 
-      double shootingAngle = 30; // Mounted angle of shooter
+      double shootingAngle = 35; // Mounted angle of shooter
       double r = 1.5 * Constants.convertToMeters; // Radius of wheel
 
       double shootingRadians = Math.sin(Math.toRadians(2 * shootingAngle));
@@ -153,5 +155,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public double getShooterTestSpeed(){
       return speedValue;
+    }
+
+    public void centerForClimb(){
+      m_turret.setSoftLimit(SoftLimitDirection.kForward, 0);
+      m_turret.setSoftLimit(SoftLimitDirection.kReverse, 0);
     }
 }

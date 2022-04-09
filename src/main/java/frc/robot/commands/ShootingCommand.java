@@ -38,15 +38,18 @@ public class ShootingCommand extends CommandBase {
     timer.start();
     
     SmartDashboard.putBoolean("Shooting", true);
-    tspeed = RobotContainer.m_shooterSubsystem.getShooterTestSpeed();
+
+    if(autoMod == 0)
+      tspeed = RobotContainer.m_shooterSubsystem.getShooterTestSpeed();
+    else
+      tspeed = autoMod;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    if(!RobotState.isAutonomous()){
-      RobotContainer.m_shooterSubsystem.setShooterSpeed(tspeed);
-    }
+    RobotContainer.m_shooterSubsystem.setShooterSpeed(tspeed);
+    
 
     if(RobotContainer.m_shooterSubsystem.isAtTarget(tspeed)) {
       RobotContainer.m_intakeSystem.setFeederSystem(1, 0.7);
@@ -70,8 +73,8 @@ public class ShootingCommand extends CommandBase {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   public boolean isFinished() {
-    return !RobotContainer.m_controllerSubsystem.m_operatorController.getB();
-    // return timer.get() > shootDuration;
+    //return !RobotContainer.m_controllerSubsystem.m_operatorController.getB();
+    return timer.get() > endTime;
     // return (timer.get() > shootDuration) || !RobotContainer.m_controllerSubsystem.m_operatorController.getB();
   }
 }

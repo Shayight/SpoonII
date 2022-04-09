@@ -1,14 +1,17 @@
 package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 //This class is to create a Button Board (PXN Arcade Fightstick) to readable values for the code.
 public class ButtonBoard {
     public GenericHID controller;
     
     public Button A,B,X,Y,LB,RB,SL,SR,share,options;
+    public Trigger RT,LT;
 
     public ButtonBoard(int port) {
         controller = new GenericHID(port);
@@ -22,7 +25,8 @@ public class ButtonBoard {
         options = new JoystickButton(controller, 8);
         SL = new JoystickButton(controller, 9);
         SR = new JoystickButton(controller, 10);
-
+        LT = new Trigger(() -> controller.getRawAxis(2) > 0);
+        RT = new Trigger(() -> controller.getRawAxis(3) > 0);
         
 
     }
