@@ -83,7 +83,7 @@ public class TestCommand {
             new AutoAimCommand(0.6)
         );
     }
-    public Command Autonomous6() { //Left autononmous, 4 ball
+    public Command Autonomous6() { //Right autononmous, 4 ball
         return new SequentialCommandGroup(
             new ParallelCommandGroup( //Phase 1, pick up ball in front. (2 balls in feeder) (4 seconds)
                 new PIDDriveCommand(65, 0.8), 
@@ -95,7 +95,7 @@ public class TestCommand {
                 new ShootingCommand(3)    
             ),
             new PIDTurn(-158, 0.6), //Phase 3, turn and pick up the ball by the driverstation. Additionally, wait a few seconds until the player feeds the ball. (2 balls in feeder) (5 seconds)
-            new PIDDriveCommand(70, 0.8),  
+            new PIDDriveCommand(160, 0.8),  
             new IntakeCommand(1, 3),
 
             new PIDDriveCommand(-30, 0.8), //Phase 4, drive backwards, turn around, and SEND IT. (4 seconds)

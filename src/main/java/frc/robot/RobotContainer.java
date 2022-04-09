@@ -59,6 +59,7 @@ public class RobotContainer {
     m_chooser.addOption("Left",m_tc.Autonomous1());
     m_chooser.addOption("Middle",m_tc.Autonomous2());
     m_chooser.addOption("Right4",m_tc.Autonomous4());
+    m_chooser.addOption("Right 4 Ball (pre-testing)", m_tc.Autonomous6());
     //executes the SmartDashboard commands.
     SetupDashboard();
 
