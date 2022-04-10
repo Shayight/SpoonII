@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class AutonomousCommand {
 
-    TestCommand m_tc;
+    NewAutonomous m_tc;
     
     /**
      * 
@@ -15,7 +15,7 @@ public class AutonomousCommand {
      * 2 = Autonomous will activate on right side.
      */
     public AutonomousCommand(){
-        m_tc = new TestCommand();
+        m_tc = new NewAutonomous();
     }
     
 }

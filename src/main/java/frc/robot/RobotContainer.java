@@ -15,6 +15,7 @@ import frc.robot.commands.AutoAimCommand;
 import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.ConveyorCommand;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.NewAutonomous;
 import frc.robot.commands.ShootingCommand;
 import frc.robot.commands.TestCommand;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -46,6 +47,7 @@ public class RobotContainer {
 
   public static AutonomousCommand m_autoCommand = new AutonomousCommand();
   private TestCommand m_tc = new TestCommand();
+  private NewAutonomous m_na = new NewAutonomous();
 
 
   //Input from the PS4 Controllers. When calling these, we must define what port the controllers are plugged into (set by the DRIVER STATION).
@@ -56,12 +58,19 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    /**    
     m_chooser.setDefaultOption("Right",m_tc.Autonomous3());
     m_chooser.addOption("Left",m_tc.Autonomous1());
     m_chooser.addOption("Middle",m_tc.Autonomous2());
     m_chooser.addOption("Right4",m_tc.Autonomous4());
     m_chooser.addOption("Right 4 Ball (pre-testing)", m_tc.Autonomous6());
-    m_chooser.addOption("Turn Right Auto", m_tc.Autonomous7());
+    m_chooser.addOption("Turn Right Auto", m_tc.Autonomous7()); 
+    */
+
+    m_chooser.setDefaultOption("Center Low Goal", m_na.autoCenterL());
+    m_chooser.setDefaultOption("Left Low Goal", m_na.autoLeftL());
+    m_chooser.setDefaultOption("Right Low Goal", m_na.autoRightL());
+
     //executes the SmartDashboard commands.
     SetupDashboard();
 
