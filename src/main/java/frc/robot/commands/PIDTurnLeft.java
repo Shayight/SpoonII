@@ -20,7 +20,7 @@ public class PIDTurnLeft extends CommandBase {
       ON COMPETITION FLOOR:
       0.1, 0.04, 0.0235
     */
-    double P=0.1, I=0.04, D=0.0235;
+    double P=0.075, I=0.04, D=0.025;
 
     // private final DriveSubsystem drive_subsystem;
   

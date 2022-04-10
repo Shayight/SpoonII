@@ -156,4 +156,9 @@ public class ShooterSubsystem extends SubsystemBase {
     public double getShooterTestSpeed(){
       return speedValue;
     }
+
+    public void centerForClimb(){
+      m_turret.setSoftLimit(SoftLimitDirection.kForward, 0);
+      m_turret.setSoftLimit(SoftLimitDirection.kReverse, 0);
+    }
 }
