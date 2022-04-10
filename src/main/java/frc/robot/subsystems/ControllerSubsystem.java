@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -35,12 +36,12 @@ public class ControllerSubsystem extends SubsystemBase {
    * OPERATOR
    * A: Automatic Aim
    * B: Shoot Cargo
-   * X:
-   * Y:
+   * X: Higher RPM
+   * Y: Lower RPM
    * L1: Conveyor Forward
    * L2: Eject Cargo
-   * R1:
-   * R2:
+   * R1: Low Goal Shoot
+   * R2: 
    * Joystick Vertical: Feeder Forward/Backward
    * Joystick Horizontal: Turret Left/Right
    * POV Vertical: Climber Up/Down
@@ -52,10 +53,16 @@ public class ControllerSubsystem extends SubsystemBase {
       m_operatorController.B.whenHeld(new ShootingCommand(10,0), true);
       
       m_operatorController.LB.whenHeld(new ConveyorCommand(0.8, 2), true);
-      m_operatorController.X.whenPressed(new InstantCommand(() -> RobotContainer.m_shooterSubsystem.modifyTurretSpeed(100)));
-      m_operatorController.Y.whenPressed(new InstantCommand(() -> RobotContainer.m_shooterSubsystem.modifyTurretSpeed(-100)));
 
-      m_operatorController.RB.whenHeld(new ShootingCommand(10, 2500),true);
+      //Adjustable Shooter Speeds
+      m_operatorController.X.whenPressed(new InstantCommand(() -> RobotContainer.m_shooterSubsystem.modifyTurretSpeed(50)));
+      m_operatorController.Y.whenPressed(new InstantCommand(() -> RobotContainer.m_shooterSubsystem.modifyTurretSpeed(-50)));
+
+      //fixed shooting speeds (low, highz)
+      m_operatorController.RB.whenHeld(new ShootingCommand(10, 4500),true);
+      m_operatorController.RT.whileActiveContinuous(new ShootingCommand(10, 1600), true);
+
+    
 
   }
 
@@ -75,6 +82,14 @@ public class ControllerSubsystem extends SubsystemBase {
       RobotContainer.m_pnuematicSubsystem.setIntakeForward();
     if(m_driverController.getR1Button())
       RobotContainer.m_pnuematicSubsystem.setIntakeReverse();
+    /** 
+    if(RobotContainer.m_limelight.getDistance() > 1 && RobotContainer.m_limelight.getDistance() < 1.5){
+      m_operatorController.setRumble(1);
+      m_operatorController.setRumble(1);
+    }else{
+      m_operatorController.setRumble(0);
+      m_operatorController.setRumble(0);
+    }*/
   }
 
   public void operatorPeriodic(){    
@@ -85,11 +100,23 @@ public class ControllerSubsystem extends SubsystemBase {
       
 
     if(m_operatorController.getPOVVertical() == 1)
-      RobotContainer.m_climberSubsystem.setClimberSpeed(-1, 0.6);
+      RobotContainer.m_climberSubsystem.setClimberSpeed(-1, 0.8);
     else if(m_operatorController.getPOVVertical() == -1)
-      RobotContainer.m_climberSubsystem.setClimberSpeed(1, 0.6);
+      RobotContainer.m_climberSubsystem.setClimberSpeed(1, 0.8);
     else
       RobotContainer.m_climberSubsystem.setClimberSpeed(0, 1);
+
+    if(m_operatorController.getSL()){
+      RobotContainer.m_climberSubsystem.setLeftClimber(-1, 0.5);
+    }
+
+    if(m_operatorController.getSR()){
+      RobotContainer.m_climberSubsystem.setRightClimber(-1, 0.5);
+    }
+
+
+
+
 
     RobotContainer.m_intakeSystem.setConveyorSpeed(-m_operatorController.getYAxis(), .45);
     RobotContainer.m_intakeSystem.setFeederSystem(-m_operatorController.getYAxis(), .6);
@@ -107,7 +134,7 @@ public class ControllerSubsystem extends SubsystemBase {
 
     if(m_operatorController.getLT()){
       // RobotContainer.m_shooterSubsystem.setShooterSpeed(-1, 0.7); //Enables shooting the balls out, which the force can be adjusted using the modifier.
-      RobotContainer.m_intakeSystem.setFeederSystem(-1, 0.7);  
+      RobotContainer.m_intakeSystem.setFeederSystem(-1, 0.8);  
       RobotContainer.m_intakeSystem.setConveyorSpeed(-1, 0.5);
     }
     else{

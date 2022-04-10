@@ -125,25 +125,6 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "0,0": {
-            "size": [
-              3,
-              3
-            ],
-            "content": {
-              "_type": "Camera Stream",
-              "_source0": "camera_server://USB Camera 0",
-              "_title": "USB Camera 0",
-              "Crosshair/Show crosshair": false,
-              "Crosshair/Crosshair color": "#CCCCCCFF",
-              "Controls/Show controls": false,
-              "Controls/Rotation": "HALF",
-              "compression": 50.0,
-              "fps": -1,
-              "imageWidth": -1,
-              "imageHeight": -1
-            }
-          },
           "7,0": {
             "size": [
               1,
@@ -263,6 +244,36 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/testShooterSpeed",
               "_title": "/SmartDashboard/testShooterSpeed"
+            }
+          },
+          "12,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Actual Target Speed",
+              "_title": "Actual Target Speed"
+            }
+          },
+          "0,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Camera Stream",
+              "_source0": "camera_server://limelight",
+              "_title": "limelight",
+              "Crosshair/Show crosshair": true,
+              "Crosshair/Crosshair color": "#FFFFFFFF",
+              "Controls/Show controls": true,
+              "Controls/Rotation": "NONE",
+              "compression": -1.0,
+              "fps": -1,
+              "imageWidth": -1,
+              "imageHeight": -1
             }
           }
         }
@@ -510,17 +521,17 @@
                 {
                   "_type": "PID Controller",
                   "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[36]",
-                  "_title": "/LiveWindow/Ungrouped/PIDController[36]"
+                  "_title": "PIDController[36]"
                 },
                 {
                   "_type": "PID Controller",
                   "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[35]",
-                  "_title": "/LiveWindow/Ungrouped/PIDController[35]"
+                  "_title": "PIDController[35]"
                 },
                 {
                   "_type": "PID Controller",
                   "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[37]",
-                  "_title": "/LiveWindow/Ungrouped/PIDController[37]"
+                  "_title": "PIDController[37]"
                 }
               ]
             }

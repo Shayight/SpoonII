@@ -18,6 +18,7 @@ public class PIDTurnLeft extends CommandBase {
       double P=0.3, I=0.04, D=0.0235;
 
       ON COMPETITION FLOOR:
+      0.1, 0.04, 0.0235
     */
     double P=0.1, I=0.04, D=0.0235;
 
@@ -27,7 +28,7 @@ public class PIDTurnLeft extends CommandBase {
       this.targetDegrees = targetDegrees;
       this.mod = mod;
       pid = new PIDController(P, I, D);
-      pid.setTolerance(1);
+      pid.setTolerance(2);
     }
   
     // Called when the command is initially scheduled.

@@ -20,7 +20,7 @@ public class PIDTurnRight extends CommandBase {
       this.targetDegrees = targetDegrees;
       this.mod = mod;
       pid = new PIDController(P, I, D);
-      pid.setTolerance(1);
+      pid.setTolerance(2);
     }
   
     // Called when the command is initially scheduled.

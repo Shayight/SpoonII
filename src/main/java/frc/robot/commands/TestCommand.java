@@ -16,7 +16,7 @@ public class TestCommand {
             new TurnRight(180, 0.7),
             new ParallelCommandGroup( 
                 new AutoAimCommand(0.6),
-                new ShootingCommand(3, 3000)    
+                new ShootingCommand(3, 4600)    
             )
         );
     }
@@ -90,7 +90,10 @@ public class TestCommand {
             new PIDDriveCommand(15, 0.5),
             new PIDTurn(90, 0.5),
             new PIDRotateTurret(-45),
-            new AutoAimCommand(0.6),
+            new SequentialCommandGroup(    
+                new AutoAimCommand(0.6),
+                new ShootingCommand(5, 3500)
+            )
         );
     }
     public Command Autonomous6() { //Right autononmous, 4 ball
@@ -122,6 +125,14 @@ public class TestCommand {
           new PIDTurnLeft(180, 1), 
           new WaitCommand(2),
           new PIDTurnRight(180, 1)
+        );
+    }
+
+    public Command Autonomous8(){
+        return new SequentialCommandGroup(
+            new PIDDriveCommand(-15, 0.8),
+            new ShootingCommand(3, 2000),
+            new PIDDriveCommand(-20, 0.8)
         );
     }
 

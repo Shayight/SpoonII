@@ -69,4 +69,14 @@ public class ClimberSubsystem extends SubsystemBase {
   public void setClimberSolenoidReverse(){
     climberSolenoid.set(Value.kReverse);
   }
+
+  public void setLeftClimber(double speed, double mod){
+    leftMotor.setSoftLimit(SoftLimitDirection.kReverse, -250);
+    leftMotor.set(speed*mod);
+  }
+
+  public void setRightClimber(double speed, double mod){
+    leftMotor.setSoftLimit(SoftLimitDirection.kReverse, -250);
+    rightMotor.set(speed*mod);
+  }
 }
