@@ -54,10 +54,10 @@ public class ShooterSubsystem extends SubsystemBase {
         // You MUST designate this as a brushless motor,
         //   as it could potentially damage the motor or motor controller if handled incorrectly.
         m_turret = new CANSparkMax(25, MotorType.kBrushless);
-        m_turret.enableSoftLimit(SoftLimitDirection.kForward, true);
+        m_turret.enableSoftLimit(SoftLimitDirection.kForward, false);
         m_turret.setSoftLimit(SoftLimitDirection.kForward, 700);
 
-        m_turret.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        m_turret.enableSoftLimit(SoftLimitDirection.kReverse, false);
         m_turret.setSoftLimit(SoftLimitDirection.kReverse, -700);
 
 
@@ -119,9 +119,9 @@ public class ShooterSubsystem extends SubsystemBase {
       double oRPM = ((60 * (v / r)) /Math.PI);
       // double oRPM = (60*(v/r))/(2*Math.PI);
 
-      System.out.println(String.format("R: %f; v: %f; oRPM: %f", R, v, oRPM));
-      SmartDashboard.putNumber("Distance From Objective", R);
-      SmartDashboard.putNumber("Decimal RPM",(oRPM/6300));
+      //System.out.println(String.format("R: %f; v: %f; oRPM: %f", R, v, oRPM));
+      //SmartDashboard.putNumber("Distance From Objective", R);
+      //SmartDashboard.putNumber("Decimal RPM",(oRPM/6300));
 
       //SmartDashboard.putNumber("Target Speed", nativeRPM);
 

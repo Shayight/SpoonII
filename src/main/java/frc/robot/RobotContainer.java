@@ -71,6 +71,11 @@ public class RobotContainer {
     m_chooser.setDefaultOption("Left Low Goal", m_na.autoLeftL());
     m_chooser.setDefaultOption("Right Low Goal", m_na.autoRightL());
 
+    
+    m_chooser.setDefaultOption("Center High Goal", m_na.autoCenterH());
+    m_chooser.setDefaultOption("Left High Goal", m_na.autoLeftH());
+    m_chooser.setDefaultOption("Right High Goal", m_na.autoRightH());
+
     //executes the SmartDashboard commands.
     SetupDashboard();
 
@@ -113,15 +118,15 @@ public class RobotContainer {
    * The intention of this method is to setup the Smart Dashboard to display global output values, such as distance, rotation, etc.
    */
   public void SetupDashboard(){
-    SmartDashboard.putNumber("Turret Encoder Rotation", m_shooterSubsystem.getRawTurretRotation());
-    SmartDashboard.putNumber("Distance travelled (in inches)",m_driveSubsystem.getLinearDistanceEncoder());
-    SmartDashboard.putNumber("Distance from Objective", m_limelight.getDistance());
-    SmartDashboard.putNumber("Motor Speed", m_driveSubsystem.getCurrentMotorSpeed());
-    SmartDashboard.putBoolean("Target Locked", m_limelight.canSeeTarget());
-    SmartDashboard.putNumber("Rotation Rate", m_driveSubsystem.getAngularAcceleration());
-    SmartDashboard.putNumber("Shooter Speed", m_shooterSubsystem.getShooterSpeed());
-    SmartDashboard.putNumber("Target Speed", m_shooterSubsystem.getRangeOfTrajectory());
-    SmartDashboard.putNumber("Current Angle of Robot",m_driveSubsystem.getRotation());
+    //SmartDashboard.putNumber("Turret Encoder Rotation", m_shooterSubsystem.getRawTurretRotation());
+    //SmartDashboard.putNumber("Distance travelled (in inches)",m_driveSubsystem.getLinearDistanceEncoder());
+    //SmartDashboard.putNumber("Distance from Objective", m_limelight.getDistance());
+    //SmartDashboard.putNumber("Motor Speed", m_driveSubsystem.getCurrentMotorSpeed());
+    //SmartDashboard.putBoolean("Target Locked", m_limelight.canSeeTarget());
+    //SmartDashboard.putNumber("Rotation Rate", m_driveSubsystem.getAngularAcceleration());
+    //SmartDashboard.putNumber("Shooter Speed", m_shooterSubsystem.getShooterSpeed());
+    //SmartDashboard.putNumber("Target Speed", m_shooterSubsystem.getRangeOfTrajectory());
+    //SmartDashboard.putNumber("Current Angle of Robot",m_driveSubsystem.getRotation());
     //SmartDashboard.putNumber("testShooterSpeed", speedValue);
 
 

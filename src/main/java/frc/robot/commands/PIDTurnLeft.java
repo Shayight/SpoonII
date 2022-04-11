@@ -5,6 +5,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class PIDTurnLeft extends CommandBase {
 
@@ -20,7 +21,7 @@ public class PIDTurnLeft extends CommandBase {
       ON COMPETITION FLOOR:
       0.1, 0.04, 0.0235
     */
-    double P=0.075, I=0.04, D=0.025;
+    double P=0.03, I=0, D=0;
 
     // private final DriveSubsystem drive_subsystem;
   
@@ -42,6 +43,7 @@ public class PIDTurnLeft extends CommandBase {
     @Override
     public void execute() {
         double speed = pid.calculate(Math.abs(RobotContainer.m_driveSubsystem.getRotation()), targetDegrees);
+        SmartDashboard.putNumber("Rotation Speed PID", speed);
         RobotContainer.m_driveSubsystem.tankDrive(-speed*mod, speed*mod);
     }
   

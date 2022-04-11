@@ -59,10 +59,10 @@ public class ControllerSubsystem extends SubsystemBase {
       m_operatorController.Y.whenPressed(new InstantCommand(() -> RobotContainer.m_shooterSubsystem.modifyTurretSpeed(-50)));
 
       //fixed shooting speeds (low, highz)
-      m_operatorController.RB.whenHeld(new ShootingCommand(10, 1600),true);
-      m_operatorController.RT.whileActiveContinuous(new ShootingCommand(10, 4500), true);
+      m_operatorController.RT.whileActiveContinuous(new ShootingCommand(10, 1600), true);
+      m_operatorController.RB.whenHeld(new ShootingCommand(10, 3500),true);
       
-
+      //m_operatorController.options.whenPressed(new PIDTurnLeft(90, 0.8));
 
 
   }

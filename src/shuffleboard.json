@@ -275,6 +275,17 @@
               "imageWidth": -1,
               "imageHeight": -1
             }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Rotation Speed PID",
+              "_title": "Rotation Speed PID"
+            }
           }
         }
       }
@@ -606,8 +617,8 @@
     }
   ],
   "windowGeometry": {
-    "x": -8.0,
-    "y": -8.0,
+    "x": -5.0,
+    "y": 224.0,
     "width": 1936.0,
     "height": 1048.0
   }

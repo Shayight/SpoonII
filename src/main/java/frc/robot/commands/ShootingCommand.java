@@ -53,7 +53,7 @@ public class ShootingCommand extends CommandBase {
 
     if(RobotContainer.m_shooterSubsystem.isAtTarget(tspeed)) {
       RobotContainer.m_intakeSystem.setFeederSystem(1, 0.7);
-      RobotContainer.m_intakeSystem.setConveyorSpeed(1, 0.7);
+      RobotContainer.m_intakeSystem.setConveyorSpeed(1, 0.9);
     }
 
   }

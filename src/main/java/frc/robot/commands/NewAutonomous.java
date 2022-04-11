@@ -32,7 +32,7 @@ public class NewAutonomous {
             //Shoot cargo into LOW goal (1500 RPM)
             new ShootingCommand(3, 1500), //CHANGE THIS IF IT ISN'T RIGHT
             //Drive out of the auto zone
-            new PIDDriveCommand(60, 0.6)
+            new PIDDriveCommand(35, 0.6)
         );
     }
 
@@ -75,9 +75,10 @@ public class NewAutonomous {
     public Command autoCenterH(){
         return new SequentialCommandGroup(
             //Shoot cargo into HIGH goal
-            new ShootingCommand(3, 3200), //CHANGE THIS IF IT ISN'T RIGHT
+            new PIDDriveCommand(10, 0.5),
+            new ShootingCommand(3, 3300), //CHANGE THIS IF IT ISN'T RIGHT
             //Drive out of the auto zone
-            new PIDDriveCommand(60, 0.6)
+            new PIDDriveCommand(20, 0.6)
         );
     }
 
